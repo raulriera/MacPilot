@@ -78,9 +78,9 @@ struct PromptBuilderTests {
         #expect(args.contains("opus"))
     }
 
-    // MARK: - Common properties
+    // MARK: - Common properties (without MCP)
 
-    @Test("All argument builders include empty tools flag")
+    @Test("All argument builders include empty tools flag when no MCP config")
     func allIncludeEmptyTools() {
         let single = PromptBuilder.arguments(for: "a")
         let session = PromptBuilder.sessionArguments(for: "b")
@@ -105,5 +105,54 @@ struct PromptBuilderTests {
             #expect(args.contains("--append-system-prompt"))
             #expect(args.contains(PromptBuilder.systemPrompt))
         }
+    }
+
+    // MARK: - MCP config
+
+    @Test("MCP config adds --mcp-config and removes --tools")
+    func mcpConfigAddsFlag() {
+        let args = PromptBuilder.arguments(
+            for: "test",
+            mcpConfigPath: "/tmp/mcp.json"
+        )
+
+        #expect(args.contains("--mcp-config"))
+        #expect(args.contains("/tmp/mcp.json"))
+        #expect(!args.contains("--tools"))
+    }
+
+    @Test("MCP config adds --allowedTools for macpilot tools")
+    func mcpConfigAddsAllowedTools() {
+        let args = PromptBuilder.arguments(
+            for: "test",
+            mcpConfigPath: "/tmp/mcp.json"
+        )
+
+        #expect(args.contains("--allowedTools"))
+        #expect(args.contains("mcp__macpilot__*"))
+    }
+
+    @Test("Session arguments support MCP config")
+    func sessionWithMCP() {
+        let args = PromptBuilder.sessionArguments(
+            for: "test",
+            mcpConfigPath: "/tmp/mcp.json"
+        )
+
+        #expect(args.contains("--mcp-config"))
+        #expect(!args.contains("--tools"))
+    }
+
+    @Test("Resume arguments support MCP config")
+    func resumeWithMCP() {
+        let args = PromptBuilder.resumeArguments(
+            for: "test",
+            sessionID: "abc",
+            mcpConfigPath: "/tmp/mcp.json"
+        )
+
+        #expect(args.contains("--mcp-config"))
+        #expect(args.contains("--resume"))
+        #expect(!args.contains("--tools"))
     }
 }

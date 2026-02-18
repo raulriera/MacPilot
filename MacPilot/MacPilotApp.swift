@@ -10,11 +10,12 @@ struct MacPilotApp: App {
 
     init() {
         do {
-            modelContainer = try ModelContainer(for: Session.self)
+            modelContainer = try ModelContainer(for: Session.self, ToolExecutionLog.self)
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }
         SessionManager.shared.configure(with: modelContainer)
+        ToolExecutionLogger.shared.configure(with: modelContainer)
     }
 
     var body: some Scene {

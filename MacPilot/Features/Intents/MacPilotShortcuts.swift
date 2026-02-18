@@ -71,5 +71,15 @@ struct MacPilotShortcuts: AppShortcutsProvider {
             shortTitle: "Send Notification",
             systemImageName: "bell"
         )
+
+        AppShortcut(
+            intent: AskWithToolsIntent(),
+            phrases: [
+                "Ask \(.applicationName) to do something",
+                "\(.applicationName) with tools"
+            ],
+            shortTitle: "Ask with Tools",
+            systemImageName: "wand.and.stars"
+        )
     }
 }

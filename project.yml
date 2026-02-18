@@ -18,6 +18,8 @@ targets:
     platform: macOS
     sources:
       - MacPilot
+    dependencies:
+      - target: MacPilotMCP
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raulriera.MacPilot
@@ -28,12 +30,35 @@ targets:
         SWIFT_EMIT_LOC_STRINGS: "YES"
         ENABLE_HARDENED_RUNTIME: "YES"
         CODE_SIGN_IDENTITY: "-"
+    postBuildScripts:
+      - name: "Embed MacPilotMCP"
+        script: |
+          cp "${BUILT_PRODUCTS_DIR}/MacPilotMCP" "${BUILT_PRODUCTS_DIR}/MacPilot.app/Contents/MacOS/MacPilotMCP"
+        basedOnDependencyAnalysis: false
+
+  MacPilotMCP:
+    type: tool
+    platform: macOS
+    sources:
+      - MacPilotMCP
+      - path: MacPilot/Features/Tools/Tool.swift
+      - path: MacPilot/Features/Tools/ClipboardTool.swift
+      - path: MacPilot/Features/Tools/NotificationTool.swift
+      - path: MacPilot/Features/Tools/WebTool.swift
+      - path: MacPilot/Features/Tools/ToolRegistry.swift
+      - path: MacPilot/Features/Notifications/NotificationManager.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raulriera.MacPilotMCP
+        GENERATE_INFOPLIST_FILE: true
+        PRODUCT_NAME: MacPilotMCP
 
   MacPilotTests:
     type: bundle.unit-test
     platform: macOS
     sources:
       - MacPilotTests
+      - path: MacPilotMCP/JSONRPCServer.swift
     dependencies:
       - target: MacPilot
     settings:

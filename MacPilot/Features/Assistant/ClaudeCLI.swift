@@ -21,6 +21,38 @@ actor ClaudeCLI {
 
     // MARK: - Public API
 
+    /// Sends a single-turn prompt to Claude with MCP tools enabled.
+    ///
+    /// Claude can invoke MacPilot tools (clipboard, notification, web) during
+    /// the conversation. Uses more turns (default: 5) to allow tool calls.
+    ///
+    /// - Parameters:
+    ///   - prompt: The user's question or instruction.
+    ///   - model: The Claude model to use (default: "sonnet").
+    ///   - maxTurns: Maximum agentic turns (default: 5).
+    /// - Returns: Claude's text response.
+    func askWithTools(
+        _ prompt: String,
+        model: String = "sonnet",
+        maxTurns: Int = 5
+    ) async throws -> String {
+        let mcpConfigPath = try MCPConfigBuilder.buildConfigFile()
+        let executablePath = try resolveExecutablePath()
+        let arguments = PromptBuilder.arguments(
+            for: prompt,
+            model: model,
+            maxTurns: maxTurns,
+            mcpConfigPath: mcpConfigPath
+        )
+        let (stdout, _) = try await runProcess(executablePath: executablePath, arguments: arguments)
+
+        guard let data = stdout.data(using: .utf8), !data.isEmpty else {
+            throw ClaudeCLIError.noOutputData
+        }
+
+        return try CLIOutput.parseResult(from: data)
+    }
+
     /// Sends a single-turn prompt to Claude and returns the text response.
     ///
     /// - Parameters:

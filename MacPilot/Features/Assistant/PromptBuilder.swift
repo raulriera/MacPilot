@@ -15,21 +15,32 @@ enum PromptBuilder {
     ///   - prompt: The user's question or instruction.
     ///   - model: The Claude model to use (default: "sonnet").
     ///   - maxTurns: Maximum agentic turns (default: 1).
+    ///   - mcpConfigPath: Optional path to an MCP config file. When provided,
+    ///     adds `--mcp-config` and removes `--tools ""` so Claude can use MCP tools.
     /// - Returns: An array of CLI argument strings.
     static func arguments(
         for prompt: String,
         model: String = "sonnet",
-        maxTurns: Int = 1
+        maxTurns: Int = 1,
+        mcpConfigPath: String? = nil
     ) -> [String] {
-        [
+        var args = [
             "-p", prompt,
             "--output-format", "json",
             "--model", model,
             "--max-turns", "\(maxTurns)",
             "--no-session-persistence",
-            "--append-system-prompt", systemPrompt,
-            "--tools", ""
+            "--append-system-prompt", systemPrompt
         ]
+
+        if let mcpConfigPath {
+            args += ["--mcp-config", mcpConfigPath]
+            args += ["--allowedTools", "mcp__macpilot__*"]
+        } else {
+            args += ["--tools", ""]
+        }
+
+        return args
     }
 
     /// Constructs arguments for starting a new persistent session.
@@ -41,20 +52,30 @@ enum PromptBuilder {
     ///   - prompt: The user's question or instruction.
     ///   - model: The Claude model to use (default: "sonnet").
     ///   - maxTurns: Maximum agentic turns (default: 3).
+    ///   - mcpConfigPath: Optional path to an MCP config file.
     /// - Returns: An array of CLI argument strings.
     static func sessionArguments(
         for prompt: String,
         model: String = "sonnet",
-        maxTurns: Int = 3
+        maxTurns: Int = 3,
+        mcpConfigPath: String? = nil
     ) -> [String] {
-        [
+        var args = [
             "-p", prompt,
             "--output-format", "json",
             "--model", model,
             "--max-turns", "\(maxTurns)",
-            "--append-system-prompt", systemPrompt,
-            "--tools", ""
+            "--append-system-prompt", systemPrompt
         ]
+
+        if let mcpConfigPath {
+            args += ["--mcp-config", mcpConfigPath]
+            args += ["--allowedTools", "mcp__macpilot__*"]
+        } else {
+            args += ["--tools", ""]
+        }
+
+        return args
     }
 
     /// Constructs arguments for resuming an existing session.
@@ -67,21 +88,31 @@ enum PromptBuilder {
     ///   - sessionID: The Claude CLI session ID to resume.
     ///   - model: The Claude model to use (default: "sonnet").
     ///   - maxTurns: Maximum agentic turns (default: 3).
+    ///   - mcpConfigPath: Optional path to an MCP config file.
     /// - Returns: An array of CLI argument strings.
     static func resumeArguments(
         for prompt: String,
         sessionID: String,
         model: String = "sonnet",
-        maxTurns: Int = 3
+        maxTurns: Int = 3,
+        mcpConfigPath: String? = nil
     ) -> [String] {
-        [
+        var args = [
             "-p", prompt,
             "--output-format", "json",
             "--model", model,
             "--max-turns", "\(maxTurns)",
             "--resume", sessionID,
-            "--append-system-prompt", systemPrompt,
-            "--tools", ""
+            "--append-system-prompt", systemPrompt
         ]
+
+        if let mcpConfigPath {
+            args += ["--mcp-config", mcpConfigPath]
+            args += ["--allowedTools", "mcp__macpilot__*"]
+        } else {
+            args += ["--tools", ""]
+        }
+
+        return args
     }
 }

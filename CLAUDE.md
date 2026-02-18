@@ -85,6 +85,17 @@ process.arguments = [
 - **Session continuity** — can resume conversations via `--resume` for multi-turn interactions
 - **Structured output** — `--json-schema` gives validated JSON matching a schema
 
+#### MCP Integration (Tool System)
+
+MacPilot's tool system uses [MCP (Model Context Protocol)](https://modelcontextprotocol.io) via the `--mcp-config` CLI flag. MacPilot bundles a lightweight command-line tool (`MacPilotMCP`) that speaks the MCP stdio protocol (JSON-RPC 2.0 over stdin/stdout). When MacPilot invokes Claude CLI with `--mcp-config`, Claude spawns the MCP server, discovers its tools, and calls them as needed — all within one CLI invocation.
+
+The MCP stdio protocol requires only 3 methods: `initialize`, `tools/list`, `tools/call`. Implemented from scratch (~200 lines) to maintain the zero-dependency constraint.
+
+| Flag | Purpose |
+|---|---|
+| `--mcp-config <path>` | Points Claude CLI to the MCP server configuration |
+| `--allowedTools "mcp__macpilot__*"` | Pre-approves MacPilot MCP tools to avoid interactive prompts |
+
 #### Considerations
 
 - Requires Claude Code to be installed and authenticated
@@ -110,20 +121,22 @@ protocol Tool: Sendable {
     var name: String { get }
     var description: String { get }
     var parameters: [ToolParameter] { get }
-    func execute(arguments: [String: Any]) async throws -> ToolResult
+    func execute(arguments: [String: JSONValue]) async throws -> ToolResult
 }
 ```
 
-The AI agent can invoke tools during a conversation. Built-in tools may include:
-- **Shell** — run whitelisted commands (with user approval)
-- **File** — read/write files in sandboxed locations
+The AI agent can invoke tools during a conversation via MCP (Model Context Protocol). Built-in tools include:
 - **Clipboard** — read/write `NSPasteboard`
 - **Notification** — send macOS notifications via `UserNotifications`
-- **Calendar/Reminders** — interact with `EventKit`
 - **Web** — fetch URLs via `URLSession`, parse content
-- **Cron** — schedule recurring tasks
 
-Each tool declares required permissions. The user approves tools at install/first-use time.
+Future tools (higher security risk, separate milestone):
+- **Shell** — run whitelisted commands (with user approval)
+- **File** — read/write files in sandboxed locations
+
+Capabilities intentionally excluded — use Apple Shortcuts instead:
+- **Calendar/Reminders** — Shortcuts provides "Find Calendar Events" and "Find Reminders" natively
+- **Cron/Scheduling** — Shortcuts Automations handle time-based, location-based, and event-based triggers
 
 ### Session Management
 
@@ -132,12 +145,6 @@ Each tool declares required permissions. The user approves tools at install/firs
 - MacPilot tracks session IDs locally in SwiftData, maps them to Claude CLI session IDs
 - Context window management is handled by Claude CLI natively
 - Sessions are stored locally in SwiftData
-
-### Scheduled Tasks
-
-- Users can create recurring automations (e.g., "summarize my calendar every morning")
-- Implemented via `DispatchSourceTimer` or Shortcuts Automations (time-based, location-based, etc.)
-- Each scheduled task is an App Intent invocation on a timer
 
 ## User Experience
 
@@ -294,9 +301,11 @@ A Shortcuts Automation triggers when you receive an email from a specific sender
 3. If `urgent == true`: sends a critical notification with the suggested action
 4. If `urgent == false`: does nothing
 
-### Design Principle
+### Design Principles
 
 The user is always in control of the workflow. MacPilot provides AI primitives (ask, transform, summarize, converse). The user composes them in Shortcuts alongside Apple's built-in actions (get calendar events, get clipboard, show notification, send message, etc.). This means every workflow is transparent, editable, and deletable — no hidden behavior.
+
+**Don't re-wrap macOS** — if Apple already exposes a capability as a Shortcuts action or system feature, don't duplicate it. MacPilot adds AI primitives. Users compose them with Apple's built-in actions.
 
 ## Privacy & Security
 
@@ -335,7 +344,6 @@ The user is always in control of the workflow. MacPilot provides AI primitives (
 - **AI**: Claude Code CLI via `Process` (Foundation)
 - **Intents**: App Intents framework
 - **Notifications**: `UserNotifications`
-- **Calendar**: `EventKit`
 - **Speech** (future): `AVSpeechSynthesizer`, `SFSpeechRecognizer`
 - **Dependencies**: None — Apple frameworks only
 - **Minimum target**: macOS 15 (Sequoia) — for latest App Intents and SwiftData features
@@ -347,15 +355,20 @@ MacPilot/
   MacPilotApp.swift          # App entry point, MenuBarExtra
   Features/
     Assistant/               # Claude CLI wrapper, prompt building, response parsing
-    Tools/                   # Tool protocol + built-in tools
+    Tools/                   # Tool protocol + built-in tools + execution logging
     Intents/                 # App Intents definitions
     Server/                  # NWListener-based local HTTP server
+    Notifications/           # UNUserNotificationCenter wrapper
     Storage/                 # SwiftData models, Keychain helpers
-    Scheduler/               # Scheduled task system
   Resources/
     Assets.xcassets
   MacPilot.entitlements
   Info.plist
+MacPilotMCP/                 # MCP server binary (stdio JSON-RPC 2.0)
+  main.swift
+  JSONRPCServer.swift
+  MCPServer.swift
+  ToolBridge.swift
 ```
 
 ## Development Guidelines
