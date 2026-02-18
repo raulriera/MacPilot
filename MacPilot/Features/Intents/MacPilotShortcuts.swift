@@ -61,5 +61,15 @@ struct MacPilotShortcuts: AppShortcutsProvider {
             shortTitle: "Summarize File",
             systemImageName: "doc.text.magnifyingglass"
         )
+
+        AppShortcut(
+            intent: SendNotificationIntent(),
+            phrases: [
+                "Send a \(.applicationName) notification",
+                "\(.applicationName) notify me"
+            ],
+            shortTitle: "Send Notification",
+            systemImageName: "bell"
+        )
     }
 }
