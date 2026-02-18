@@ -30,7 +30,7 @@ targets:
         SWIFT_EMIT_LOC_STRINGS: "YES"
         ENABLE_HARDENED_RUNTIME: "YES"
         CODE_SIGN_IDENTITY: "-"
-    postBuildScripts:
+    postCompileScripts:
       - name: "Embed MacPilotMCP"
         script: |
           cp "${BUILT_PRODUCTS_DIR}/MacPilotMCP" "${BUILT_PRODUCTS_DIR}/MacPilot.app/Contents/MacOS/MacPilotMCP"

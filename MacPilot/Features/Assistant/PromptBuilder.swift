@@ -35,7 +35,7 @@ enum PromptBuilder {
 
         if let mcpConfigPath {
             args += ["--mcp-config", mcpConfigPath]
-            args += ["--allowedTools", "mcp__macpilot__*"]
+            args += ["--allowedTools", "mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web"]
         } else {
             args += ["--tools", ""]
         }
@@ -70,7 +70,7 @@ enum PromptBuilder {
 
         if let mcpConfigPath {
             args += ["--mcp-config", mcpConfigPath]
-            args += ["--allowedTools", "mcp__macpilot__*"]
+            args += ["--allowedTools", "mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web"]
         } else {
             args += ["--tools", ""]
         }
@@ -108,7 +108,7 @@ enum PromptBuilder {
 
         if let mcpConfigPath {
             args += ["--mcp-config", mcpConfigPath]
-            args += ["--allowedTools", "mcp__macpilot__*"]
+            args += ["--allowedTools", "mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web"]
         } else {
             args += ["--tools", ""]
         }
