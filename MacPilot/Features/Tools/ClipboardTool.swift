@@ -31,18 +31,17 @@ struct ClipboardTool: Tool {
 
         switch action {
         case "read":
-            return await readClipboard()
+            return readClipboard()
         case "write":
             guard let content = arguments["content"]?.stringValue else {
                 return .failure("Missing required parameter: content (needed for write action)")
             }
-            return await writeClipboard(content)
+            return writeClipboard(content)
         default:
             return .failure("Unknown action: \(action). Use 'read' or 'write'.")
         }
     }
 
-    @MainActor
     private func readClipboard() -> ToolResult {
         guard let content = NSPasteboard.general.string(forType: .string) else {
             return .success("Clipboard is empty.")
@@ -50,7 +49,6 @@ struct ClipboardTool: Tool {
         return .success(content)
     }
 
-    @MainActor
     private func writeClipboard(_ content: String) -> ToolResult {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(content, forType: .string)

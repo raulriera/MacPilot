@@ -6,20 +6,25 @@ import Foundation
 /// - `initialize` — returns server capabilities
 /// - `tools/list` — returns tool definitions from `ToolRegistry`
 /// - `tools/call` — executes a tool and returns the result
+///
+/// The read loop is fully synchronous. Only tool execution bridges to async
+/// via a per-call semaphore, avoiding the deadlock that occurs when mixing
+/// `readLine()` with Swift structured concurrency.
 final class MCPServer {
     private let registry: ToolRegistry
     private let server: JSONRPCServer
 
     init(registry: ToolRegistry) {
         self.registry = registry
-        self.server = JSONRPCServer { [registry] request in
-            await MCPServer.handle(request: request, registry: registry)
+        let reg = registry
+        self.server = JSONRPCServer { request in
+            MCPServer.handle(request: request, registry: reg)
         }
     }
 
     /// Starts the server, blocking on stdin until EOF.
-    func run() async {
-        await server.run()
+    func run() {
+        server.run()
     }
 
     // MARK: - Request Handling
@@ -27,7 +32,7 @@ final class MCPServer {
     private static func handle(
         request: JSONRPCRequest,
         registry: ToolRegistry
-    ) async -> [String: Any]? {
+    ) -> [String: Any]? {
         guard let id = request.id else {
             // JSON-RPC notification — no response needed
             return nil
@@ -42,7 +47,7 @@ final class MCPServer {
         case "tools/list":
             return handleToolsList(id: id, registry: registry)
         case "tools/call":
-            return await handleToolsCall(id: id, params: request.params, registry: registry)
+            return handleToolsCall(id: id, params: request.params, registry: registry)
         default:
             return JSONRPCServer.errorResponse(
                 id: id,
@@ -76,7 +81,7 @@ final class MCPServer {
         id: Int,
         params: [String: Any],
         registry: ToolRegistry
-    ) async -> [String: Any] {
+    ) -> [String: Any] {
         guard let toolName = params["name"] as? String else {
             return JSONRPCServer.errorResponse(
                 id: id,
@@ -96,12 +101,25 @@ final class MCPServer {
         let rawArguments = params["arguments"] as? [String: Any] ?? [:]
         let arguments = convertArguments(rawArguments)
 
-        let result: ToolResult
-        do {
-            result = try await tool.execute(arguments: arguments)
-        } catch {
-            result = .failure("Tool execution failed: \(error.localizedDescription)")
+        // Bridge async tool execution to synchronous context.
+        // Each tool call gets its own semaphore — no global deadlock risk.
+        let semaphore = DispatchSemaphore(value: 0)
+        let box = ResultBox()
+
+        let capturedTool = tool
+        let capturedArgs = arguments
+        Task {
+            do {
+                let r = try await capturedTool.execute(arguments: capturedArgs)
+                box.set(r)
+            } catch {
+                box.set(.failure("Tool execution failed: \(error.localizedDescription)"))
+            }
+            semaphore.signal()
         }
+
+        semaphore.wait()
+        let result = box.get()
 
         return JSONRPCServer.successResponse(id: id, result: [
             "content": [
@@ -133,5 +151,20 @@ final class MCPServer {
             }
         }
         return result
+    }
+}
+
+/// Thread-safe box for passing a `ToolResult` from an async Task back to
+/// a synchronous caller via `DispatchSemaphore`. Marked `@unchecked Sendable`
+/// because access is serialized by the semaphore (write before signal, read after wait).
+private final class ResultBox: @unchecked Sendable {
+    private var value: ToolResult = .failure("Tool execution timed out")
+
+    func set(_ result: ToolResult) {
+        value = result
+    }
+
+    func get() -> ToolResult {
+        value
     }
 }

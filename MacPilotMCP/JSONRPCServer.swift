@@ -24,10 +24,10 @@ struct JSONRPCRequest {
 /// Minimal JSON-RPC 2.0 server over stdin/stdout.
 ///
 /// Reads newline-delimited JSON from stdin, dispatches to a handler,
-/// and writes JSON responses to stdout. This is the transport layer
-/// for the MCP stdio protocol.
+/// and writes JSON responses to stdout. Fully synchronous — the read loop
+/// blocks on `readLine()` which is the correct behavior for MCP stdio transport.
 final class JSONRPCServer {
-    typealias Handler = (JSONRPCRequest) async -> [String: Any]?
+    typealias Handler = (JSONRPCRequest) -> [String: Any]?
 
     private let handler: Handler
 
@@ -36,7 +36,7 @@ final class JSONRPCServer {
     }
 
     /// Runs the server, blocking on stdin until EOF.
-    func run() async {
+    func run() {
         while let line = readLine(strippingNewline: true) {
             guard !line.isEmpty else { continue }
 
@@ -52,7 +52,7 @@ final class JSONRPCServer {
                 continue
             }
 
-            if let response = await handler(request) {
+            if let response = handler(request) {
                 writeLine(response)
             }
             // Notifications (no id) that return nil are silently dropped per JSON-RPC spec
