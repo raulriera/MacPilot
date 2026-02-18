@@ -1,9 +1,21 @@
 import SwiftUI
+import SwiftData
 import ServiceManagement
 
 @main
 struct MacPilotApp: App {
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+
+    let modelContainer: ModelContainer
+
+    init() {
+        do {
+            modelContainer = try ModelContainer(for: Session.self)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
+        SessionManager.shared.configure(with: modelContainer)
+    }
 
     var body: some Scene {
         MenuBarExtra("MacPilot", systemImage: "brain") {
@@ -19,6 +31,7 @@ struct MacPilotApp: App {
             }
             .keyboardShortcut("q")
         }
+        .modelContainer(modelContainer)
     }
 
     private func setLaunchAtLogin(_ enabled: Bool) {

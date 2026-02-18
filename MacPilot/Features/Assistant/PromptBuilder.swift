@@ -31,4 +31,57 @@ enum PromptBuilder {
             "--tools", ""
         ]
     }
+
+    /// Constructs arguments for starting a new persistent session.
+    ///
+    /// Same as `arguments()` but omits `--no-session-persistence` so Claude CLI
+    /// creates a session that can be resumed later.
+    ///
+    /// - Parameters:
+    ///   - prompt: The user's question or instruction.
+    ///   - model: The Claude model to use (default: "sonnet").
+    ///   - maxTurns: Maximum agentic turns (default: 3).
+    /// - Returns: An array of CLI argument strings.
+    static func sessionArguments(
+        for prompt: String,
+        model: String = "sonnet",
+        maxTurns: Int = 3
+    ) -> [String] {
+        [
+            "-p", prompt,
+            "--output-format", "json",
+            "--model", model,
+            "--max-turns", "\(maxTurns)",
+            "--append-system-prompt", systemPrompt,
+            "--tools", ""
+        ]
+    }
+
+    /// Constructs arguments for resuming an existing session.
+    ///
+    /// Uses `--resume` with the Claude CLI session ID and omits
+    /// `--no-session-persistence` to maintain session continuity.
+    ///
+    /// - Parameters:
+    ///   - prompt: The user's follow-up message.
+    ///   - sessionID: The Claude CLI session ID to resume.
+    ///   - model: The Claude model to use (default: "sonnet").
+    ///   - maxTurns: Maximum agentic turns (default: 3).
+    /// - Returns: An array of CLI argument strings.
+    static func resumeArguments(
+        for prompt: String,
+        sessionID: String,
+        model: String = "sonnet",
+        maxTurns: Int = 3
+    ) -> [String] {
+        [
+            "-p", prompt,
+            "--output-format", "json",
+            "--model", model,
+            "--max-turns", "\(maxTurns)",
+            "--resume", sessionID,
+            "--append-system-prompt", systemPrompt,
+            "--tools", ""
+        ]
+    }
 }

@@ -21,5 +21,25 @@ struct MacPilotShortcuts: AppShortcutsProvider {
             shortTitle: "Summarize Clipboard",
             systemImageName: "doc.text"
         )
+
+        AppShortcut(
+            intent: StartSessionIntent(),
+            phrases: [
+                "Start a \(.applicationName) session",
+                "New \(.applicationName) conversation"
+            ],
+            shortTitle: "Start Session",
+            systemImageName: "bubble.left.and.bubble.right"
+        )
+
+        AppShortcut(
+            intent: ContinueSessionIntent(),
+            phrases: [
+                "Continue \(.applicationName) session",
+                "Reply to \(.applicationName)"
+            ],
+            shortTitle: "Continue Session",
+            systemImageName: "bubble.left.and.text.bubble.right"
+        )
     }
 }

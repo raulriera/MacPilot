@@ -39,6 +39,62 @@ actor ClaudeCLI {
         return try CLIOutput.parseResult(from: data)
     }
 
+    /// Starts a new persistent session with Claude.
+    ///
+    /// Unlike `ask()`, this creates a session that can be resumed later
+    /// via `continueSession()`. Returns both the response and the session ID
+    /// needed for resumption.
+    ///
+    /// - Parameters:
+    ///   - prompt: The user's initial question or instruction.
+    ///   - model: The Claude model to use (default: "sonnet").
+    /// - Returns: A tuple of Claude's text response and the session ID.
+    func startSession(
+        _ prompt: String,
+        model: String = "sonnet"
+    ) async throws -> (response: String, sessionID: String) {
+        let executablePath = try resolveExecutablePath()
+        let arguments = PromptBuilder.sessionArguments(for: prompt, model: model)
+        let (stdout, _) = try await runProcess(executablePath: executablePath, arguments: arguments)
+
+        guard let data = stdout.data(using: .utf8), !data.isEmpty else {
+            throw ClaudeCLIError.noOutputData
+        }
+
+        let parsed = try CLIOutput.parseSessionResult(from: data)
+        return (response: parsed.result, sessionID: parsed.sessionID)
+    }
+
+    /// Continues an existing session with a follow-up message.
+    ///
+    /// Uses `--resume` with the Claude CLI session ID to maintain
+    /// conversation context across turns.
+    ///
+    /// - Parameters:
+    ///   - prompt: The user's follow-up message.
+    ///   - sessionID: The Claude CLI session ID to resume.
+    ///   - model: The Claude model to use (default: "sonnet").
+    /// - Returns: Claude's text response.
+    func continueSession(
+        _ prompt: String,
+        sessionID: String,
+        model: String = "sonnet"
+    ) async throws -> String {
+        let executablePath = try resolveExecutablePath()
+        let arguments = PromptBuilder.resumeArguments(
+            for: prompt,
+            sessionID: sessionID,
+            model: model
+        )
+        let (stdout, _) = try await runProcess(executablePath: executablePath, arguments: arguments)
+
+        guard let data = stdout.data(using: .utf8), !data.isEmpty else {
+            throw ClaudeCLIError.noOutputData
+        }
+
+        return try CLIOutput.parseResult(from: data)
+    }
+
     // MARK: - Executable Resolution
 
     /// Resolves the path to the Claude CLI executable.

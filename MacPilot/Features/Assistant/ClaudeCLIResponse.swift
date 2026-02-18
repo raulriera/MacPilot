@@ -8,11 +8,13 @@ struct CLIMessage: Decodable, Sendable {
     let type: String
     let subtype: String?
     let result: String?
+    let sessionID: String?
 
     enum CodingKeys: String, CodingKey {
         case type
         case subtype
         case result
+        case sessionID = "session_id"
     }
 }
 
@@ -33,5 +35,28 @@ enum CLIOutput {
         }
 
         return result
+    }
+
+    /// Parses the raw JSON data and extracts both the result text and session ID.
+    ///
+    /// Used for session-creating invocations where we need to capture the
+    /// Claude CLI session ID for future `--resume` calls.
+    static func parseSessionResult(from data: Data) throws -> (result: String, sessionID: String) {
+        let message: CLIMessage
+        do {
+            message = try JSONDecoder().decode(CLIMessage.self, from: data)
+        } catch {
+            throw ClaudeCLIError.jsonDecodingFailed(underlying: error)
+        }
+
+        guard message.type == "result", let result = message.result else {
+            throw ClaudeCLIError.noResultMessage
+        }
+
+        guard let sessionID = message.sessionID else {
+            throw ClaudeCLIError.noSessionID
+        }
+
+        return (result, sessionID)
     }
 }

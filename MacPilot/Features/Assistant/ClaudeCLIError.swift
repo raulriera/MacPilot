@@ -6,6 +6,7 @@ enum ClaudeCLIError: LocalizedError {
     case noOutputData
     case jsonDecodingFailed(underlying: Error)
     case noResultMessage
+    case noSessionID
 
     var errorDescription: String? {
         switch self {
@@ -19,6 +20,8 @@ enum ClaudeCLIError: LocalizedError {
             "Failed to decode Claude CLI response: \(underlying.localizedDescription)"
         case .noResultMessage:
             "Claude CLI response contained no result message"
+        case .noSessionID:
+            "Claude CLI response did not include a session ID"
         }
     }
 }

@@ -28,3 +28,17 @@ targets:
         SWIFT_EMIT_LOC_STRINGS: "YES"
         ENABLE_HARDENED_RUNTIME: "YES"
         CODE_SIGN_IDENTITY: "-"
+
+  MacPilotTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - MacPilotTests
+    dependencies:
+      - target: MacPilot
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.raulriera.MacPilotTests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MacPilot.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MacPilot"
+        BUNDLE_LOADER: "$(TEST_HOST)"
