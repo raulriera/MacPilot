@@ -78,7 +78,7 @@ Open **Shortcuts.app** and look under **MacPilot** in the App Shortcuts section.
 | Shortcut | Siri phrase | What it does |
 |---|---|---|
 | **Ask MacPilot** | "Ask MacPilot a question" | Send a question, get a text answer |
-| **Ask with Tools** | "Ask MacPilot to do something" | Same, but Claude can use clipboard, web, and notifications |
+| **Ask with Tools** | "Ask MacPilot to do something" | Same, but Claude can use clipboard, web, notifications, and shell |
 | **Summarize Clipboard** | "MacPilot explain this" | Summarizes whatever is on your clipboard |
 | **Transform Text** | "MacPilot rewrite this" | Takes clipboard + an instruction, returns transformed text |
 | **Summarize File** | "Summarize file with MacPilot" | Summarizes a file's contents |
@@ -102,6 +102,18 @@ The real power is composing MacPilot intents with Apple's built-in actions. Exam
 3. Copy to Clipboard
 4. Show Notification → "Refactored code on clipboard"
 
+**GitHub triage** (single shortcut):
+1. Ask with Tools → "Check my top GitHub issues on owner/repo and prioritize them"
+2. Claude runs `gh issue list`, reads the results, and returns a prioritized summary
+
+**Project summary** (bound to a keyboard shortcut):
+1. Ask with Tools → "Run git log on ~/Developer/MyApp and summarize what changed this week"
+2. Claude runs `git log --since='1 week ago'`, analyzes the commits, and returns a summary
+
+**Disk check** (Shortcuts Automation, daily at 9 AM):
+1. Ask with Tools → "Check my disk space and notify me if any volume is below 20% free"
+2. Claude runs `df -h`, evaluates the output, and sends a notification if needed
+
 **AI with tools** (single shortcut):
 1. Ask with Tools → "Read my clipboard, summarize it, and send the summary as a notification"
 2. Claude reads the clipboard, processes it, and sends a notification — all in one step
@@ -111,7 +123,7 @@ The real power is composing MacPilot intents with Apple's built-in actions. Exam
 | | Ask MacPilot | Ask with Tools |
 |---|---|---|
 | Speed | Fast (1 turn) | Slower (up to 5 turns) |
-| Tools | None | Clipboard, Web, Notifications |
+| Tools | None | Clipboard, Web, Notifications, Shell |
 | Use when | Quick Q&A | You need Claude to *do* something |
 
 ## MCP Tools
@@ -123,6 +135,7 @@ When using **Ask with Tools**, Claude can call these tools during the conversati
 | `clipboard` | Read or write the macOS clipboard |
 | `web` | Fetch a URL and return its text content |
 | `notification` | Send a macOS notification |
+| `shell` | Execute a shell command and return its output |
 
 Tools are exposed via [MCP (Model Context Protocol)](https://modelcontextprotocol.io). MacPilot bundles a lightweight MCP server (`MacPilotMCP`) that Claude CLI spawns automatically.
 
