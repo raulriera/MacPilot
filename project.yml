@@ -46,7 +46,6 @@ targets:
       - path: MacPilot/Features/Tools/NotificationTool.swift
       - path: MacPilot/Features/Tools/WebTool.swift
       - path: MacPilot/Features/Tools/ToolRegistry.swift
-      - path: MacPilot/Features/Notifications/NotificationManager.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raulriera.MacPilotMCP

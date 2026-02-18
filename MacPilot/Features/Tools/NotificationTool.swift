@@ -1,9 +1,10 @@
 import Foundation
 
-/// Sends macOS notifications via `NotificationManager`.
+/// Sends macOS notifications.
 ///
-/// Delegates to the existing `NotificationManager.shared` actor
-/// for authorization and delivery.
+/// Uses `osascript` (AppleScript) to send notifications, which works from
+/// both the main app and the MCP command-line binary. `UNUserNotificationCenter`
+/// requires a full app context with a bundle ID, which the MCP binary lacks.
 struct NotificationTool: Tool {
     let name = "notification"
     let description = "Send a macOS notification with a title and body."
@@ -30,7 +31,31 @@ struct NotificationTool: Tool {
             return .failure("Missing required parameter: body")
         }
 
-        let result = try await NotificationManager.shared.send(title: title, body: body)
-        return .success(result)
+        return sendViaOsascript(title: title, body: body)
+    }
+
+    private func sendViaOsascript(title: String, body: String) -> ToolResult {
+        let escapedTitle = title.replacingOccurrences(of: "\"", with: "\\\"")
+        let escapedBody = body.replacingOccurrences(of: "\"", with: "\\\"")
+        let script = "display notification \"\(escapedBody)\" with title \"\(escapedTitle)\""
+
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+        process.arguments = ["-e", script]
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+
+            if process.terminationStatus == 0 {
+                return .success("Notification sent.")
+            } else {
+                return .failure("osascript exited with code \(process.terminationStatus)")
+            }
+        } catch {
+            return .failure("Failed to send notification: \(error.localizedDescription)")
+        }
     }
 }
