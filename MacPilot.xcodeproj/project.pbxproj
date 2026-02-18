@@ -1,0 +1,764 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C3D4E5F6A7B8C9D0E1F2A3B4 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F2 /* ActivityLogView.swift */; };
+		D4E5F6A7B8C9D0E1F2A3B4C5 /* GettingStartedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F2A3 /* GettingStartedView.swift */; };
+		005DC242AC6C239D376A30C1 /* MacPilotShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFECF98E6C49200651398AE /* MacPilotShortcuts.swift */; };
+		098C31469D6F2BB07D47EABE /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112FF45AC76516D37F198AF0 /* NotificationManager.swift */; };
+		0A520DBD206CEF1BDBCA9DE4 /* ClipboardTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C862D2FFC330A25A79A35E /* ClipboardTool.swift */; };
+		0C32CB8D64B04079E8DF8EB1 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9723E253DAC10C561EDC2B /* PromptBuilder.swift */; };
+		0D5AAB6861DA8882382B6A67 /* MacPilotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB81AA6A4A1BE44786DC2FE /* MacPilotApp.swift */; };
+		0E46E7C48E7D4882201FEA32 /* MCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E829DC90CC37F845C88B8B0 /* MCPServer.swift */; };
+		0F43CAA2846C2F9BDBD9C5B7 /* AskMacPilotIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D6D8AE6F2BA7787BDF2EA6 /* AskMacPilotIntent.swift */; };
+		18E9F47A3541DF0BD49884DF /* ClaudeCLIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4627DE5B86E9FBFA1E599E /* ClaudeCLIResponse.swift */; };
+		18EFC5B0F3C8D3356645A3BB /* SummarizeClipboardIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC9AD390BBD340236ACCAB8 /* SummarizeClipboardIntent.swift */; };
+		1CD8856E46B37845DCFCBD4C /* ToolExecutionLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EA535434B2FCEB09236DA4 /* ToolExecutionLog.swift */; };
+		2A6B528EAC05AF9B05B295E3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DDF2015661E66E3CF81C06 /* main.swift */; };
+		2AEFD4887FA2538048B896E0 /* ShellTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91164A152CEB5CB629ACA35 /* ShellTool.swift */; };
+		2E463A455741CE2BEB749025 /* WebTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB256B460D3AC7982826BEE8 /* WebTool.swift */; };
+		30D972520341B3F4781074C5 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3210776535248237E3EC7C8 /* SessionManager.swift */; };
+		41F3306EEE23B7687A674D66 /* WebTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB256B460D3AC7982826BEE8 /* WebTool.swift */; };
+		4543E2785FDCB9CA7D2CB4C7 /* SummarizeFileIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FEBA885B6C61488E8E940E /* SummarizeFileIntent.swift */; };
+		4CFF673705B66D8D0A6F8A7B /* NotificationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC24703F63A45A04577B47F /* NotificationTool.swift */; };
+		4DB84BC19C61817BF92E48B0 /* ToolRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF009B15181C813FB82F21C2 /* ToolRegistryTests.swift */; };
+		4F4891B70CD7354824272970 /* ToolRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EF318D91B9EB06AB3C59EC /* ToolRegistry.swift */; };
+		5455272C4CF3723ADD8856CF /* TransformTextIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6DD20E1B0982ED5052EB8B /* TransformTextIntent.swift */; };
+		56A72A85DBF6BA8BF34D8779 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB562B0976B2802F6F86EF4E /* Session.swift */; };
+		576090BF5A37F1BD09D0C9E0 /* ToolBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2553A77D016B2BE4EEB05A /* ToolBridge.swift */; };
+		5C7308F9BAC248F4F9440E52 /* ClipboardToolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341842F6232E9788AD1B3C71 /* ClipboardToolTests.swift */; };
+		62179E7D80BC07FD949AA288 /* AskWithToolsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B86339D738BCE93D9832BAF /* AskWithToolsIntent.swift */; };
+		66A0BB4B4485B1D504B6A845 /* ClipboardTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C862D2FFC330A25A79A35E /* ClipboardTool.swift */; };
+		6C0496AE28C0A645451A109A /* SessionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DD1439CB041CAF5B83A848 /* SessionEntity.swift */; };
+		6E4D7BD1E51C23B595FCDD7F /* MCPConfigBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D318DA384EEDD7E54EC40C0 /* MCPConfigBuilder.swift */; };
+		6ED980B6B9F82F2D65D9216F /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B7215A498ED7577CC80C84 /* Tool.swift */; };
+		7457CDD38A1636A8032D4FAE /* StartSessionIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3823642378C2BA70E93B5AAD /* StartSessionIntent.swift */; };
+		78A0BD7E0E41521BA8216088 /* ClaudeCLIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA1606E99A6F81733F4EB54 /* ClaudeCLIError.swift */; };
+		8835DEFFE2C22F4864A445B3 /* SummarizeFileIntentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60177131A46E23D2B7C6FB27 /* SummarizeFileIntentTests.swift */; };
+		8B633AFD8F63BEC78A5C1826 /* ToolExecutionLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48141CD05673E40F587D07A /* ToolExecutionLogger.swift */; };
+		943CF1F69F6438F1926C5327 /* PromptBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BB3A5C557A469AA1EF3EEB /* PromptBuilderTests.swift */; };
+		96F8734E9D346C8FAE814B0E /* JSONRPCServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748A90C7395B34DA5DAB1B86 /* JSONRPCServer.swift */; };
+		9866C7F56FDCD4590E2AF20A /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC10A7CEC36C80DB15A58A03 /* SessionManagerTests.swift */; };
+		9C027C0FB5F625EB1051FEBF /* ContinueSessionIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911F75A3243DF1984FBA7794 /* ContinueSessionIntent.swift */; };
+		9C8D7BA52591F0103B6EF714 /* ShellTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91164A152CEB5CB629ACA35 /* ShellTool.swift */; };
+		9CA2530838C6568A015D0AC8 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B7215A498ED7577CC80C84 /* Tool.swift */; };
+		A22FD043394DD38E9DD1A9E7 /* WebToolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8861B33DA1B9D5F4B0FCA743 /* WebToolTests.swift */; };
+		A5DF0F54D044127CA5D95F05 /* TransformTextIntentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6749399F6206D6583F0A1271 /* TransformTextIntentTests.swift */; };
+		B14AF0AB20623E978B3466DD /* SendNotificationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995BB69E58BEB6A9E8704A86 /* SendNotificationIntent.swift */; };
+		BD7C9D6AEA5D70F05F4F977E /* MacPilotMCP in Resources */ = {isa = PBXBuildFile; fileRef = D06A820889C4EB0E4428F6BD /* MacPilotMCP */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C3086D2D514D19D926D424BB /* CLIOutputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68C8A00103E3CDF2DAA954F /* CLIOutputTests.swift */; };
+		CDBF47C87CD3D95CDBD75B35 /* NotificationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC24703F63A45A04577B47F /* NotificationTool.swift */; };
+		D256200AB694E3BFEEAD2140 /* ClaudeCLI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23A7136240518C4E26DEC34 /* ClaudeCLI.swift */; };
+		EBF09A384A94AD7EFD2DF23F /* ShellToolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891D88FA98A458FA9FA05EE5 /* ShellToolTests.swift */; };
+		EEDA1B8BBD715F833CF265BB /* JSONRPCServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748A90C7395B34DA5DAB1B86 /* JSONRPCServer.swift */; };
+		EF4AF5192FFC27B97263E8F4 /* JSONRPCServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12BE46D319ECDED60D3B2AA /* JSONRPCServerTests.swift */; };
+		F09FE26BF282EBBC07127F42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E26852107CB4279AEB1DE24C /* Assets.xcassets */; };
+		FA37FEDA78DA8578EE06989F /* ToolRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EF318D91B9EB06AB3C59EC /* ToolRegistry.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0491B23EE44AE637CB32949A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C91C1AE20ECE66F32D900BE9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B6744E05B4B405C6B8F179D0;
+			remoteInfo = MacPilotMCP;
+		};
+		8FDC51D9B31C0318B05F3BAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C91C1AE20ECE66F32D900BE9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93C03DD3D9567770C159C04D;
+			remoteInfo = MacPilot;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* ActivityLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLogView.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6A7B8C9D0E1F2A3 /* GettingStartedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GettingStartedView.swift; sourceTree = "<group>"; };
+		10DD1439CB041CAF5B83A848 /* SessionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEntity.swift; sourceTree = "<group>"; };
+		112FF45AC76516D37F198AF0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		11DDF2015661E66E3CF81C06 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		22D6D8AE6F2BA7787BDF2EA6 /* AskMacPilotIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskMacPilotIntent.swift; sourceTree = "<group>"; };
+		341842F6232E9788AD1B3C71 /* ClipboardToolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardToolTests.swift; sourceTree = "<group>"; };
+		34FEBA885B6C61488E8E940E /* SummarizeFileIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeFileIntent.swift; sourceTree = "<group>"; };
+		37C862D2FFC330A25A79A35E /* ClipboardTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardTool.swift; sourceTree = "<group>"; };
+		3823642378C2BA70E93B5AAD /* StartSessionIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSessionIntent.swift; sourceTree = "<group>"; };
+		4B6DD20E1B0982ED5052EB8B /* TransformTextIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformTextIntent.swift; sourceTree = "<group>"; };
+		53B7215A498ED7577CC80C84 /* Tool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
+		56EA535434B2FCEB09236DA4 /* ToolExecutionLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolExecutionLog.swift; sourceTree = "<group>"; };
+		5D318DA384EEDD7E54EC40C0 /* MCPConfigBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCPConfigBuilder.swift; sourceTree = "<group>"; };
+		60177131A46E23D2B7C6FB27 /* SummarizeFileIntentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeFileIntentTests.swift; sourceTree = "<group>"; };
+		61BB3A5C557A469AA1EF3EEB /* PromptBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilderTests.swift; sourceTree = "<group>"; };
+		660079927280F48B09D89CA6 /* MacPilot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacPilot.entitlements; sourceTree = "<group>"; };
+		6749399F6206D6583F0A1271 /* TransformTextIntentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformTextIntentTests.swift; sourceTree = "<group>"; };
+		6D01DE40BC62EEDAD0638F4C /* MacPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		748A90C7395B34DA5DAB1B86 /* JSONRPCServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRPCServer.swift; sourceTree = "<group>"; };
+		7B86339D738BCE93D9832BAF /* AskWithToolsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskWithToolsIntent.swift; sourceTree = "<group>"; };
+		7E829DC90CC37F845C88B8B0 /* MCPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCPServer.swift; sourceTree = "<group>"; };
+		8861B33DA1B9D5F4B0FCA743 /* WebToolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebToolTests.swift; sourceTree = "<group>"; };
+		891D88FA98A458FA9FA05EE5 /* ShellToolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellToolTests.swift; sourceTree = "<group>"; };
+		8DFECF98E6C49200651398AE /* MacPilotShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPilotShortcuts.swift; sourceTree = "<group>"; };
+		911F75A3243DF1984FBA7794 /* ContinueSessionIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueSessionIntent.swift; sourceTree = "<group>"; };
+		995BB69E58BEB6A9E8704A86 /* SendNotificationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendNotificationIntent.swift; sourceTree = "<group>"; };
+		9F4627DE5B86E9FBFA1E599E /* ClaudeCLIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCLIResponse.swift; sourceTree = "<group>"; };
+		A91164A152CEB5CB629ACA35 /* ShellTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellTool.swift; sourceTree = "<group>"; };
+		AC10A7CEC36C80DB15A58A03 /* SessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManagerTests.swift; sourceTree = "<group>"; };
+		B12BE46D319ECDED60D3B2AA /* JSONRPCServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRPCServerTests.swift; sourceTree = "<group>"; };
+		B23A7136240518C4E26DEC34 /* ClaudeCLI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCLI.swift; sourceTree = "<group>"; };
+		B48141CD05673E40F587D07A /* ToolExecutionLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolExecutionLogger.swift; sourceTree = "<group>"; };
+		B68C8A00103E3CDF2DAA954F /* CLIOutputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIOutputTests.swift; sourceTree = "<group>"; };
+		BD2553A77D016B2BE4EEB05A /* ToolBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBridge.swift; sourceTree = "<group>"; };
+		BDA1606E99A6F81733F4EB54 /* ClaudeCLIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCLIError.swift; sourceTree = "<group>"; };
+		CCB81AA6A4A1BE44786DC2FE /* MacPilotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPilotApp.swift; sourceTree = "<group>"; };
+		CF009B15181C813FB82F21C2 /* ToolRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolRegistryTests.swift; sourceTree = "<group>"; };
+		D06A820889C4EB0E4428F6BD /* MacPilotMCP */ = {isa = PBXFileReference; includeInIndex = 0; path = MacPilotMCP; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBC24703F63A45A04577B47F /* NotificationTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTool.swift; sourceTree = "<group>"; };
+		E26852107CB4279AEB1DE24C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E533543CA6EA8C5CF7B4126A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E5EF318D91B9EB06AB3C59EC /* ToolRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolRegistry.swift; sourceTree = "<group>"; };
+		EB256B460D3AC7982826BEE8 /* WebTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebTool.swift; sourceTree = "<group>"; };
+		EB562B0976B2802F6F86EF4E /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		ECC9AD390BBD340236ACCAB8 /* SummarizeClipboardIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeClipboardIntent.swift; sourceTree = "<group>"; };
+		F3210776535248237E3EC7C8 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		F3D1A757D135549C84777CE8 /* MacPilotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacPilotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE9723E253DAC10C561EDC2B /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1795A43590D2BA48A992596C /* MacPilot */ = {
+			isa = PBXGroup;
+			children = (
+				E533543CA6EA8C5CF7B4126A /* Info.plist */,
+				660079927280F48B09D89CA6 /* MacPilot.entitlements */,
+				CCB81AA6A4A1BE44786DC2FE /* MacPilotApp.swift */,
+				D6DFCBA1C5F101A0D61E7172 /* Features */,
+				820ECA546049D5302467F7B2 /* Resources */,
+			);
+			path = MacPilot;
+			sourceTree = "<group>";
+		};
+		57083514226C7299C9A04591 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6D01DE40BC62EEDAD0638F4C /* MacPilot.app */,
+				D06A820889C4EB0E4428F6BD /* MacPilotMCP */,
+				F3D1A757D135549C84777CE8 /* MacPilotTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A536073FAFC120498C749A8 /* MacPilotMCP */ = {
+			isa = PBXGroup;
+			children = (
+				748A90C7395B34DA5DAB1B86 /* JSONRPCServer.swift */,
+				11DDF2015661E66E3CF81C06 /* main.swift */,
+				7E829DC90CC37F845C88B8B0 /* MCPServer.swift */,
+				BD2553A77D016B2BE4EEB05A /* ToolBridge.swift */,
+			);
+			path = MacPilotMCP;
+			sourceTree = "<group>";
+		};
+		60CEAE0C0C32F412CF6F4A43 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				37C862D2FFC330A25A79A35E /* ClipboardTool.swift */,
+				DBC24703F63A45A04577B47F /* NotificationTool.swift */,
+				A91164A152CEB5CB629ACA35 /* ShellTool.swift */,
+				53B7215A498ED7577CC80C84 /* Tool.swift */,
+				56EA535434B2FCEB09236DA4 /* ToolExecutionLog.swift */,
+				B48141CD05673E40F587D07A /* ToolExecutionLogger.swift */,
+				E5EF318D91B9EB06AB3C59EC /* ToolRegistry.swift */,
+				EB256B460D3AC7982826BEE8 /* WebTool.swift */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		69535E5CA81C541426A5CC2A /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				22D6D8AE6F2BA7787BDF2EA6 /* AskMacPilotIntent.swift */,
+				7B86339D738BCE93D9832BAF /* AskWithToolsIntent.swift */,
+				911F75A3243DF1984FBA7794 /* ContinueSessionIntent.swift */,
+				8DFECF98E6C49200651398AE /* MacPilotShortcuts.swift */,
+				995BB69E58BEB6A9E8704A86 /* SendNotificationIntent.swift */,
+				10DD1439CB041CAF5B83A848 /* SessionEntity.swift */,
+				3823642378C2BA70E93B5AAD /* StartSessionIntent.swift */,
+				ECC9AD390BBD340236ACCAB8 /* SummarizeClipboardIntent.swift */,
+				34FEBA885B6C61488E8E940E /* SummarizeFileIntent.swift */,
+				4B6DD20E1B0982ED5052EB8B /* TransformTextIntent.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
+		6B2FD208B49B695BAEEDD9FB /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				EB562B0976B2802F6F86EF4E /* Session.swift */,
+				F3210776535248237E3EC7C8 /* SessionManager.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		82088262B127D5CFD7853F26 = {
+			isa = PBXGroup;
+			children = (
+				1795A43590D2BA48A992596C /* MacPilot */,
+				5A536073FAFC120498C749A8 /* MacPilotMCP */,
+				E36DCE0F9FCB87EAF0956776 /* MacPilotTests */,
+				57083514226C7299C9A04591 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		820ECA546049D5302467F7B2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E26852107CB4279AEB1DE24C /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8FC302C13E20DEE241302C22 /* Assistant */ = {
+			isa = PBXGroup;
+			children = (
+				B23A7136240518C4E26DEC34 /* ClaudeCLI.swift */,
+				BDA1606E99A6F81733F4EB54 /* ClaudeCLIError.swift */,
+				9F4627DE5B86E9FBFA1E599E /* ClaudeCLIResponse.swift */,
+				5D318DA384EEDD7E54EC40C0 /* MCPConfigBuilder.swift */,
+				FE9723E253DAC10C561EDC2B /* PromptBuilder.swift */,
+			);
+			path = Assistant;
+			sourceTree = "<group>";
+		};
+		D6DFCBA1C5F101A0D61E7172 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				8FC302C13E20DEE241302C22 /* Assistant */,
+				69535E5CA81C541426A5CC2A /* Intents */,
+				E5BEAB260F1884A9D086717E /* Notifications */,
+				6B2FD208B49B695BAEEDD9FB /* Storage */,
+				60CEAE0C0C32F412CF6F4A43 /* Tools */,
+				E5F6A7B8C9D0E1F2A3B4C5D6 /* Views */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		E36DCE0F9FCB87EAF0956776 /* MacPilotTests */ = {
+			isa = PBXGroup;
+			children = (
+				B68C8A00103E3CDF2DAA954F /* CLIOutputTests.swift */,
+				341842F6232E9788AD1B3C71 /* ClipboardToolTests.swift */,
+				B12BE46D319ECDED60D3B2AA /* JSONRPCServerTests.swift */,
+				61BB3A5C557A469AA1EF3EEB /* PromptBuilderTests.swift */,
+				AC10A7CEC36C80DB15A58A03 /* SessionManagerTests.swift */,
+				891D88FA98A458FA9FA05EE5 /* ShellToolTests.swift */,
+				60177131A46E23D2B7C6FB27 /* SummarizeFileIntentTests.swift */,
+				CF009B15181C813FB82F21C2 /* ToolRegistryTests.swift */,
+				6749399F6206D6583F0A1271 /* TransformTextIntentTests.swift */,
+				8861B33DA1B9D5F4B0FCA743 /* WebToolTests.swift */,
+			);
+			path = MacPilotTests;
+			sourceTree = "<group>";
+		};
+		E5F6A7B8C9D0E1F2A3B4C5D6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* ActivityLogView.swift */,
+				B2C3D4E5F6A7B8C9D0E1F2A3 /* GettingStartedView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E5BEAB260F1884A9D086717E /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				112FF45AC76516D37F198AF0 /* NotificationManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		64A449E1E17376DA101CC91F /* MacPilotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CFACAF4B73CB30FF06ADDEBE /* Build configuration list for PBXNativeTarget "MacPilotTests" */;
+			buildPhases = (
+				5D96534E51039CE1CC0A6632 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				86E141C9696BCA98ADAF9BAC /* PBXTargetDependency */,
+			);
+			name = MacPilotTests;
+			packageProductDependencies = (
+			);
+			productName = MacPilotTests;
+			productReference = F3D1A757D135549C84777CE8 /* MacPilotTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		93C03DD3D9567770C159C04D /* MacPilot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91E3BBEFCA10352353AAE571 /* Build configuration list for PBXNativeTarget "MacPilot" */;
+			buildPhases = (
+				F40B16BA29FEF8EC5274AB81 /* Sources */,
+				4BDA8BF28D6846417C055BB2 /* Embed MacPilotMCP */,
+				D297AA7953613DE0BD5F3C80 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ED3BDBD01439897F89BAC1F5 /* PBXTargetDependency */,
+			);
+			name = MacPilot;
+			packageProductDependencies = (
+			);
+			productName = MacPilot;
+			productReference = 6D01DE40BC62EEDAD0638F4C /* MacPilot.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B6744E05B4B405C6B8F179D0 /* MacPilotMCP */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A570C043C3E55E6DDC96E6F /* Build configuration list for PBXNativeTarget "MacPilotMCP" */;
+			buildPhases = (
+				D52343B1B8DDFB9B54548FF0 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacPilotMCP;
+			packageProductDependencies = (
+			);
+			productName = MacPilotMCP;
+			productReference = D06A820889C4EB0E4428F6BD /* MacPilotMCP */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C91C1AE20ECE66F32D900BE9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+			};
+			buildConfigurationList = 2E919A61158938B850691BDE /* Build configuration list for PBXProject "MacPilot" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 82088262B127D5CFD7853F26;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				93C03DD3D9567770C159C04D /* MacPilot */,
+				B6744E05B4B405C6B8F179D0 /* MacPilotMCP */,
+				64A449E1E17376DA101CC91F /* MacPilotTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D297AA7953613DE0BD5F3C80 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F09FE26BF282EBBC07127F42 /* Assets.xcassets in Resources */,
+				BD7C9D6AEA5D70F05F4F977E /* MacPilotMCP in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4BDA8BF28D6846417C055BB2 /* Embed MacPilotMCP */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Embed MacPilotMCP";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp \"${BUILT_PRODUCTS_DIR}/MacPilotMCP\" \"${BUILT_PRODUCTS_DIR}/MacPilot.app/Contents/MacOS/MacPilotMCP\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5D96534E51039CE1CC0A6632 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3086D2D514D19D926D424BB /* CLIOutputTests.swift in Sources */,
+				5C7308F9BAC248F4F9440E52 /* ClipboardToolTests.swift in Sources */,
+				EEDA1B8BBD715F833CF265BB /* JSONRPCServer.swift in Sources */,
+				EF4AF5192FFC27B97263E8F4 /* JSONRPCServerTests.swift in Sources */,
+				943CF1F69F6438F1926C5327 /* PromptBuilderTests.swift in Sources */,
+				9866C7F56FDCD4590E2AF20A /* SessionManagerTests.swift in Sources */,
+				EBF09A384A94AD7EFD2DF23F /* ShellToolTests.swift in Sources */,
+				8835DEFFE2C22F4864A445B3 /* SummarizeFileIntentTests.swift in Sources */,
+				4DB84BC19C61817BF92E48B0 /* ToolRegistryTests.swift in Sources */,
+				A5DF0F54D044127CA5D95F05 /* TransformTextIntentTests.swift in Sources */,
+				A22FD043394DD38E9DD1A9E7 /* WebToolTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D52343B1B8DDFB9B54548FF0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A520DBD206CEF1BDBCA9DE4 /* ClipboardTool.swift in Sources */,
+				96F8734E9D346C8FAE814B0E /* JSONRPCServer.swift in Sources */,
+				0E46E7C48E7D4882201FEA32 /* MCPServer.swift in Sources */,
+				CDBF47C87CD3D95CDBD75B35 /* NotificationTool.swift in Sources */,
+				9C8D7BA52591F0103B6EF714 /* ShellTool.swift in Sources */,
+				6ED980B6B9F82F2D65D9216F /* Tool.swift in Sources */,
+				576090BF5A37F1BD09D0C9E0 /* ToolBridge.swift in Sources */,
+				FA37FEDA78DA8578EE06989F /* ToolRegistry.swift in Sources */,
+				41F3306EEE23B7687A674D66 /* WebTool.swift in Sources */,
+				2A6B528EAC05AF9B05B295E3 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F40B16BA29FEF8EC5274AB81 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3D4E5F6A7B8C9D0E1F2A3B4 /* ActivityLogView.swift in Sources */,
+				0F43CAA2846C2F9BDBD9C5B7 /* AskMacPilotIntent.swift in Sources */,
+				62179E7D80BC07FD949AA288 /* AskWithToolsIntent.swift in Sources */,
+				D256200AB694E3BFEEAD2140 /* ClaudeCLI.swift in Sources */,
+				78A0BD7E0E41521BA8216088 /* ClaudeCLIError.swift in Sources */,
+				18E9F47A3541DF0BD49884DF /* ClaudeCLIResponse.swift in Sources */,
+				66A0BB4B4485B1D504B6A845 /* ClipboardTool.swift in Sources */,
+				9C027C0FB5F625EB1051FEBF /* ContinueSessionIntent.swift in Sources */,
+				D4E5F6A7B8C9D0E1F2A3B4C5 /* GettingStartedView.swift in Sources */,
+				6E4D7BD1E51C23B595FCDD7F /* MCPConfigBuilder.swift in Sources */,
+				0D5AAB6861DA8882382B6A67 /* MacPilotApp.swift in Sources */,
+				005DC242AC6C239D376A30C1 /* MacPilotShortcuts.swift in Sources */,
+				098C31469D6F2BB07D47EABE /* NotificationManager.swift in Sources */,
+				4CFF673705B66D8D0A6F8A7B /* NotificationTool.swift in Sources */,
+				0C32CB8D64B04079E8DF8EB1 /* PromptBuilder.swift in Sources */,
+				B14AF0AB20623E978B3466DD /* SendNotificationIntent.swift in Sources */,
+				56A72A85DBF6BA8BF34D8779 /* Session.swift in Sources */,
+				6C0496AE28C0A645451A109A /* SessionEntity.swift in Sources */,
+				30D972520341B3F4781074C5 /* SessionManager.swift in Sources */,
+				2AEFD4887FA2538048B896E0 /* ShellTool.swift in Sources */,
+				7457CDD38A1636A8032D4FAE /* StartSessionIntent.swift in Sources */,
+				18EFC5B0F3C8D3356645A3BB /* SummarizeClipboardIntent.swift in Sources */,
+				4543E2785FDCB9CA7D2CB4C7 /* SummarizeFileIntent.swift in Sources */,
+				9CA2530838C6568A015D0AC8 /* Tool.swift in Sources */,
+				1CD8856E46B37845DCFCBD4C /* ToolExecutionLog.swift in Sources */,
+				8B633AFD8F63BEC78A5C1826 /* ToolExecutionLogger.swift in Sources */,
+				4F4891B70CD7354824272970 /* ToolRegistry.swift in Sources */,
+				5455272C4CF3723ADD8856CF /* TransformTextIntent.swift in Sources */,
+				2E463A455741CE2BEB749025 /* WebTool.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		86E141C9696BCA98ADAF9BAC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93C03DD3D9567770C159C04D /* MacPilot */;
+			targetProxy = 8FDC51D9B31C0318B05F3BAF /* PBXContainerItemProxy */;
+		};
+		ED3BDBD01439897F89BAC1F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B6744E05B4B405C6B8F179D0 /* MacPilotMCP */;
+			targetProxy = 0491B23EE44AE637CB32949A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0092B977FE3CC8B097E9D5BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		228D0D8BB265C585D02CC221 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MacPilot/MacPilot.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MacPilot/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulriera.MacPilot;
+				PRODUCT_NAME = MacPilot;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		36E9ADAB43B9F355E207D8D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulriera.MacPilotTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacPilot.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MacPilot";
+			};
+			name = Release;
+		};
+		78F2D9D2DD43A77C2D46019A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		84D941C77C109A1738D46416 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulriera.MacPilotMCP;
+				PRODUCT_NAME = MacPilotMCP;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B0C1AAD3A3B19543FB91BBFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulriera.MacPilotTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacPilot.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MacPilot";
+			};
+			name = Debug;
+		};
+		D2B242BC45445DB25DBF63E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MacPilot/MacPilot.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MacPilot/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulriera.MacPilot;
+				PRODUCT_NAME = MacPilot;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		E83B0915D39010532EF17AC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.raulriera.MacPilotMCP;
+				PRODUCT_NAME = MacPilotMCP;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2E919A61158938B850691BDE /* Build configuration list for PBXProject "MacPilot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0092B977FE3CC8B097E9D5BB /* Debug */,
+				78F2D9D2DD43A77C2D46019A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3A570C043C3E55E6DDC96E6F /* Build configuration list for PBXNativeTarget "MacPilotMCP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84D941C77C109A1738D46416 /* Debug */,
+				E83B0915D39010532EF17AC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		91E3BBEFCA10352353AAE571 /* Build configuration list for PBXNativeTarget "MacPilot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D2B242BC45445DB25DBF63E4 /* Debug */,
+				228D0D8BB265C585D02CC221 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CFACAF4B73CB30FF06ADDEBE /* Build configuration list for PBXNativeTarget "MacPilotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0C1AAD3A3B19543FB91BBFF /* Debug */,
+				36E9ADAB43B9F355E207D8D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C91C1AE20ECE66F32D900BE9 /* Project object */;
+}

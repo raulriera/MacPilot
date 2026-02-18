@@ -48,4 +48,51 @@ final class ToolExecutionLogger {
         context.insert(entry)
         try context.save()
     }
+
+    /// Imports tool execution logs from a JSONL file written by the MCP server.
+    ///
+    /// Each line is a JSON object with: toolName, arguments, resultContent,
+    /// isError, executedAt (ISO 8601), durationMs. The file is deleted after import.
+    func importLogs(from filePath: String) {
+        guard FileManager.default.fileExists(atPath: filePath) else { return }
+
+        defer { try? FileManager.default.removeItem(atPath: filePath) }
+
+        guard let data = FileManager.default.contents(atPath: filePath),
+              let content = String(data: data, encoding: .utf8) else { return }
+
+        let formatter = ISO8601DateFormatter()
+
+        for line in content.split(separator: "\n") where !line.isEmpty {
+            guard let lineData = line.data(using: .utf8),
+                  let json = try? JSONSerialization.jsonObject(with: lineData) as? [String: Any],
+                  let toolName = json["toolName"] as? String,
+                  let arguments = json["arguments"] as? String,
+                  let resultContent = json["resultContent"] as? String,
+                  let isError = json["isError"] as? Bool,
+                  let durationMs = json["durationMs"] as? Int else {
+                continue
+            }
+
+            let executedAt: Date
+            if let dateString = json["executedAt"] as? String,
+               let parsed = formatter.date(from: dateString) {
+                executedAt = parsed
+            } else {
+                executedAt = Date()
+            }
+
+            let entry = ToolExecutionLog(
+                toolName: toolName,
+                arguments: arguments,
+                resultContent: resultContent,
+                isError: isError,
+                executedAt: executedAt,
+                durationMs: durationMs
+            )
+            context.insert(entry)
+        }
+
+        try? context.save()
+    }
 }

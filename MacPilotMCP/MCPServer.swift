@@ -13,12 +13,15 @@ import Foundation
 final class MCPServer {
     private let registry: ToolRegistry
     private let server: JSONRPCServer
+    private let logFilePath: String?
 
-    init(registry: ToolRegistry) {
+    init(registry: ToolRegistry, logFilePath: String? = nil) {
         self.registry = registry
+        self.logFilePath = logFilePath
         let reg = registry
+        let logPath = logFilePath
         self.server = JSONRPCServer { request in
-            MCPServer.handle(request: request, registry: reg)
+            MCPServer.handle(request: request, registry: reg, logFilePath: logPath)
         }
     }
 
@@ -31,7 +34,8 @@ final class MCPServer {
 
     private static func handle(
         request: JSONRPCRequest,
-        registry: ToolRegistry
+        registry: ToolRegistry,
+        logFilePath: String?
     ) -> [String: Any]? {
         guard let id = request.id else {
             // JSON-RPC notification — no response needed
@@ -47,7 +51,7 @@ final class MCPServer {
         case "tools/list":
             return handleToolsList(id: id, registry: registry)
         case "tools/call":
-            return handleToolsCall(id: id, params: request.params, registry: registry)
+            return handleToolsCall(id: id, params: request.params, registry: registry, logFilePath: logFilePath)
         default:
             return JSONRPCServer.errorResponse(
                 id: id,
@@ -80,7 +84,8 @@ final class MCPServer {
     private static func handleToolsCall(
         id: Int,
         params: [String: Any],
-        registry: ToolRegistry
+        registry: ToolRegistry,
+        logFilePath: String?
     ) -> [String: Any] {
         guard let toolName = params["name"] as? String else {
             return JSONRPCServer.errorResponse(
@@ -108,6 +113,7 @@ final class MCPServer {
 
         let capturedTool = tool
         let capturedArgs = arguments
+        let startTime = DispatchTime.now()
         Task {
             do {
                 let r = try await capturedTool.execute(arguments: capturedArgs)
@@ -121,6 +127,16 @@ final class MCPServer {
         semaphore.wait()
         let result = box.get()
 
+        let elapsed = DispatchTime.now().uptimeNanoseconds - startTime.uptimeNanoseconds
+        let durationMs = Int(elapsed / 1_000_000)
+        writeLogEntry(
+            toolName: toolName,
+            arguments: rawArguments,
+            result: result,
+            durationMs: durationMs,
+            logFilePath: logFilePath
+        )
+
         return JSONRPCServer.successResponse(id: id, result: [
             "content": [
                 [
@@ -130,6 +146,45 @@ final class MCPServer {
             ],
             "isError": result.isError
         ] as [String: Any])
+    }
+
+    /// Writes a tool execution log entry to the JSONL log file.
+    private static func writeLogEntry(
+        toolName: String,
+        arguments: [String: Any],
+        result: ToolResult,
+        durationMs: Int,
+        logFilePath: String?
+    ) {
+        guard let logFilePath else { return }
+
+        let entry: [String: Any] = [
+            "toolName": toolName,
+            "arguments": (try? String(
+                data: JSONSerialization.data(withJSONObject: arguments),
+                encoding: .utf8
+            )) ?? "{}",
+            "resultContent": result.content,
+            "isError": result.isError,
+            "executedAt": ISO8601DateFormatter().string(from: Date()),
+            "durationMs": durationMs
+        ]
+
+        guard let data = try? JSONSerialization.data(withJSONObject: entry),
+              var line = String(data: data, encoding: .utf8) else { return }
+
+        line.append("\n")
+        let fileURL = URL(fileURLWithPath: logFilePath)
+
+        if FileManager.default.fileExists(atPath: logFilePath) {
+            if let handle = try? FileHandle(forWritingTo: fileURL) {
+                handle.seekToEndOfFile()
+                handle.write(Data(line.utf8))
+                handle.closeFile()
+            }
+        } else {
+            try? Data(line.utf8).write(to: fileURL)
+        }
     }
 
     /// Converts raw JSON `Any` values to `JSONValue` for the tool protocol.

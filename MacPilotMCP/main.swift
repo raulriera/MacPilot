@@ -8,5 +8,12 @@ import Foundation
 /// Fully synchronous — blocks on `readLine()` until stdin closes (EOF).
 
 let registry = ToolRegistryFactory.makeDefault()
-let server = MCPServer(registry: registry)
+
+var logFilePath: String?
+if let index = CommandLine.arguments.firstIndex(of: "--log-file"),
+   index + 1 < CommandLine.arguments.count {
+    logFilePath = CommandLine.arguments[index + 1]
+}
+
+let server = MCPServer(registry: registry, logFilePath: logFilePath)
 server.run()

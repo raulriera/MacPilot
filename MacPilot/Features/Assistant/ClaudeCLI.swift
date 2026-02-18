@@ -36,15 +36,18 @@ actor ClaudeCLI {
         model: String = "sonnet",
         maxTurns: Int = 5
     ) async throws -> String {
-        let mcpConfigPath = try MCPConfigBuilder.buildConfigFile()
+        let config = try MCPConfigBuilder.buildConfigFile()
         let executablePath = try resolveExecutablePath()
         let arguments = PromptBuilder.arguments(
             for: prompt,
             model: model,
             maxTurns: maxTurns,
-            mcpConfigPath: mcpConfigPath
+            mcpConfigPath: config.configPath
         )
         let (stdout, _) = try await runProcess(executablePath: executablePath, arguments: arguments)
+
+        // Import tool execution logs written by the MCP server
+        await ToolExecutionLogger.shared.importLogs(from: config.logFilePath)
 
         guard let data = stdout.data(using: .utf8), !data.isEmpty else {
             throw ClaudeCLIError.noOutputData
