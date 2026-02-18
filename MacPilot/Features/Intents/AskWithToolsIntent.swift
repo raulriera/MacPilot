@@ -7,7 +7,7 @@ import AppIntents
 /// Slower than plain Q&A due to additional turns and subprocess overhead.
 struct AskWithToolsIntent: AppIntent {
     static let title: LocalizedStringResource = "Ask MacPilot with Tools"
-    static let description: IntentDescription = "Ask MacPilot a question with access to system tools (clipboard, web, notifications)."
+    static let description: IntentDescription = "Ask MacPilot a question with access to system tools (clipboard, web, notifications, shell)."
 
     static let openAppWhenRun: Bool = false
 

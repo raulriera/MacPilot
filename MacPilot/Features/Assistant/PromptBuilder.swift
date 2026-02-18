@@ -2,11 +2,18 @@ import Foundation
 
 /// Builds CLI argument arrays for Claude Code invocations.
 enum PromptBuilder {
+    /// The MCP tool names pre-approved via `--allowedTools`.
+    private static let allowedTools = "mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web mcp__macpilot__shell"
+
     /// The system prompt suffix appended to every MacPilot invocation.
     static let systemPrompt = """
         You are MacPilot, a personal AI assistant running as a macOS menu bar app. \
         Keep responses concise and actionable. Do not use markdown formatting unless \
-        explicitly requested. Respond in plain text.
+        explicitly requested. Respond in plain text. \
+        You are running in non-interactive mode — there is no way for the user to \
+        respond to follow-up questions or approve actions. Never ask for permission, \
+        confirmation, or approval. All MCP tools (clipboard, web, notification, shell) \
+        are pre-approved. Execute them immediately and return the result.
         """
 
     /// Constructs the arguments array for a single-turn prompt.
@@ -35,7 +42,7 @@ enum PromptBuilder {
 
         if let mcpConfigPath {
             args += ["--mcp-config", mcpConfigPath]
-            args += ["--allowedTools", "mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web"]
+            args += ["--allowedTools", allowedTools]
         } else {
             args += ["--tools", ""]
         }
@@ -70,7 +77,7 @@ enum PromptBuilder {
 
         if let mcpConfigPath {
             args += ["--mcp-config", mcpConfigPath]
-            args += ["--allowedTools", "mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web"]
+            args += ["--allowedTools", allowedTools]
         } else {
             args += ["--tools", ""]
         }
@@ -108,7 +115,7 @@ enum PromptBuilder {
 
         if let mcpConfigPath {
             args += ["--mcp-config", mcpConfigPath]
-            args += ["--allowedTools", "mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web"]
+            args += ["--allowedTools", allowedTools]
         } else {
             args += ["--tools", ""]
         }

@@ -8,7 +8,7 @@ struct ToolRegistryTests {
     func defaultRegistryContainsAllTools() {
         let registry = ToolRegistryFactory.makeDefault()
 
-        #expect(registry.allTools.count == 3)
+        #expect(registry.allTools.count == 4)
     }
 
     @Test("Lookup by name returns the correct tool")
@@ -26,6 +26,10 @@ struct ToolRegistryTests {
         let web = registry.tool(named: "web")
         #expect(web != nil)
         #expect(web?.name == "web")
+
+        let shell = registry.tool(named: "shell")
+        #expect(shell != nil)
+        #expect(shell?.name == "shell")
     }
 
     @Test("Lookup for unknown tool returns nil")

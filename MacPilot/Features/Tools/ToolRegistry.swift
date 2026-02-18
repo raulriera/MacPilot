@@ -32,7 +32,8 @@ enum ToolRegistryFactory {
         ToolRegistry(tools: [
             ClipboardTool(),
             NotificationTool(),
-            WebTool()
+            WebTool(),
+            ShellTool()
         ])
     }
 }

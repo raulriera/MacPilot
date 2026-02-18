@@ -45,6 +45,7 @@ targets:
       - path: MacPilot/Features/Tools/ClipboardTool.swift
       - path: MacPilot/Features/Tools/NotificationTool.swift
       - path: MacPilot/Features/Tools/WebTool.swift
+      - path: MacPilot/Features/Tools/ShellTool.swift
       - path: MacPilot/Features/Tools/ToolRegistry.swift
     settings:
       base:

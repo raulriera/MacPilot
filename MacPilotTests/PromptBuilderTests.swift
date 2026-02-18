@@ -129,7 +129,7 @@ struct PromptBuilderTests {
         )
 
         #expect(args.contains("--allowedTools"))
-        #expect(args.contains("mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web"))
+        #expect(args.contains("mcp__macpilot__clipboard mcp__macpilot__notification mcp__macpilot__web mcp__macpilot__shell"))
     }
 
     @Test("Session arguments support MCP config")
