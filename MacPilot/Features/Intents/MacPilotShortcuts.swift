@@ -41,5 +41,25 @@ struct MacPilotShortcuts: AppShortcutsProvider {
             shortTitle: "Continue Session",
             systemImageName: "bubble.left.and.text.bubble.right"
         )
+
+        AppShortcut(
+            intent: TransformTextIntent(),
+            phrases: [
+                "\(.applicationName) rewrite this",
+                "Transform with \(.applicationName)"
+            ],
+            shortTitle: "Transform Text",
+            systemImageName: "pencil.and.outline"
+        )
+
+        AppShortcut(
+            intent: SummarizeFileIntent(),
+            phrases: [
+                "Summarize file with \(.applicationName)",
+                "\(.applicationName) summarize this file"
+            ],
+            shortTitle: "Summarize File",
+            systemImageName: "doc.text.magnifyingglass"
+        )
     }
 }
