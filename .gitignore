@@ -1,15 +1,5 @@
-# Xcode
-*.xcodeproj/
-xcuserdata/
-DerivedData/
-build/
-*.xcworkspace/
-
-# macOS
+config/.env
+logs/
 .DS_Store
-
-# Code coverage
 *.profraw
-
-# Claude Code
 .claude/
