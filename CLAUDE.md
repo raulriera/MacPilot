@@ -4,14 +4,14 @@ Scheduled autonomous Claude agents for macOS, powered by launchd and shell scrip
 
 ## What This Is
 
-A collection of shell scripts that run Claude Code CLI on a schedule via launchd. No app, no framework, no compilation. Each agent is a `.sh` file paired with a `.plist` that tells macOS when to run it.
+A collection of shell scripts that run Claude Code CLI on a schedule via launchd. No app, no framework, no compilation. Each agent is a `.sh` file paired with one or more `.plist` files that tell macOS when to run it.
 
 ## Project Goals
 
 - Run Claude agents on a schedule (daily, hourly, whatever)
 - Zero dependencies beyond `claude` CLI and `jq`
 - Each agent is a standalone script — easy to read, edit, copy
-- Secrets live in one `.env` file, never hardcoded
+- Secrets and project paths live in one `.env` file, never hardcoded
 - Every run is logged with timestamp and result
 - macOS notifications on completion or failure
 - Install/uninstall with one command
@@ -33,44 +33,85 @@ If you need to guide an agent mid-task or have a conversation, use `claude` inte
 
 ### An agent is two files
 
-**1. A shell script** (`agents/triage-bugs.sh`):
+**1. A shell script** (`agents/test-xcode-project.sh`):
 
 ```sh
 #!/bin/sh
 . "$(dirname "$0")/../lib/macpilot.sh"
 
-run_agent "Fetch the top error from BugSnag using the BUGSNAG_API_KEY env var. \
-Analyze the stack trace and summarize the fix in one paragraph." \
-  --max-turns 5
+if [ -z "$PROJECT_DIR" ]; then
+  echo "PROJECT_DIR not set" >&2
+  notify "MacPilot: $AGENT_NAME" "PROJECT_DIR not set. Check .env or plist."
+  exit 1
+fi
+
+cd "$PROJECT_DIR" || exit 1
+
+run_agent "Run the $TEST_PLAN test plan and propose fixes for any failures. ..." \
+  --max-turns 10 \
+  --allowedTools "Read Bash Write Glob Grep"
 ```
 
-**2. A launchd plist** (`plists/com.macpilot.triage-bugs.plist`):
+**2. A launchd plist** (`plists/com.macpilot.test-xcode-project.plist`):
 
 ```xml
 <plist version="1.0">
 <dict>
-  <key>Label</key><string>com.macpilot.triage-bugs</string>
+  <key>Label</key>
+  <string>com.macpilot.test-xcode-project</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>MACPILOT_AGENT_NAME</key>
+    <string>test-xcode-project</string>
+    <key>PROJECT_DIR</key>
+    <string>__HOME__/Developer/MyApp</string>
+    <key>TEST_PLAN</key>
+    <string>AllTargets</string>
+  </dict>
   <key>ProgramArguments</key>
-  <array><string>/path/to/agents/triage-bugs.sh</string></array>
+  <array>
+    <string>__MACPILOT_DIR__/agents/test-xcode-project.sh</string>
+  </array>
   <key>StartCalendarInterval</key>
   <dict>
-    <key>Hour</key><integer>8</integer>
+    <key>Hour</key><integer>2</integer>
     <key>Minute</key><integer>0</integer>
   </dict>
-  <key>StandardOutPath</key><string>/path/to/logs/triage-bugs.log</string>
-  <key>StandardErrorPath</key><string>/path/to/logs/triage-bugs.err</string>
+  <key>StandardOutPath</key>
+  <string>__MACPILOT_DIR__/logs/test-xcode-project.out</string>
+  <key>StandardErrorPath</key>
+  <string>__MACPILOT_DIR__/logs/test-xcode-project.err</string>
 </dict>
 </plist>
 ```
 
-That's it. macOS runs the script at 8 AM. The script calls Claude, logs the result, and sends a notification.
+`install.sh` substitutes `__MACPILOT_DIR__` and `__HOME__` with real paths when installing.
+
+### Reusing scripts across projects
+
+A single agent script can serve multiple projects. Each plist sets its own environment variables:
+
+- `PROJECT_DIR` — the project to operate on
+- `MACPILOT_AGENT_NAME` — overrides the default name (derived from script filename) so logs, reports, and notifications are distinct
+- Any agent-specific config (e.g. `TEST_PLAN`, `SIMULATOR_DESTINATION`)
+
+For example, `test-xcode-project.sh` can test any Xcode project. Create one plist per project with different env vars — same script, separate logs and reports.
+
+You can also override env vars inline when running manually:
+
+```sh
+PROJECT_DIR=~/Developer/OtherApp TEST_PLAN=UnitTests ./agents/test-xcode-project.sh
+```
+
+The `.env` file provides defaults. Variables already set in the environment (via inline override or plist `EnvironmentVariables`) are not overwritten by `.env`.
 
 ### Shared library
 
 `lib/macpilot.sh` handles the boring parts every agent needs:
 
 - **Find claude** — checks `~/.local/bin/claude`, `/usr/local/bin/claude`, `/opt/homebrew/bin/claude`
-- **Load .env** — sources `config/.env` to inject API keys into the environment
+- **Load .env** — sources `config/.env` to inject API keys and defaults (skips vars already set, expands `~` to `$HOME`)
+- **Agent name** — uses `MACPILOT_AGENT_NAME` if set, otherwise derives from script filename
 - **Call claude** — runs `claude -p "..." --output-format json --no-session-persistence` with sensible defaults and a timeout
 - **Parse output** — pipes through `jq` to extract the text response
 - **Log** — appends timestamped results to the agent's log file
@@ -93,20 +134,26 @@ Agents source this library and call `run_agent "prompt"` with optional flag over
 
 ### Project-scoped agents
 
-For agents that work inside a project directory (code review, TODO cleanup, etc.), the script `cd`s into the project before calling Claude:
+Agents that work inside a project directory read `PROJECT_DIR` from the environment:
 
 ```sh
 #!/bin/sh
 . "$(dirname "$0")/../lib/macpilot.sh"
 
-cd ~/Developer/MyApp || exit 1
+if [ -z "$PROJECT_DIR" ]; then
+  echo "PROJECT_DIR not set" >&2
+  notify "MacPilot: $AGENT_NAME" "PROJECT_DIR not set. Check .env or plist."
+  exit 1
+fi
+
+cd "$PROJECT_DIR" || exit 1
 
 run_agent "Find all TODO comments, fix them, and summarize what you did." \
-  --max-turns 15 \
+  --max-turns 10 \
   --allowedTools "Read Edit Write Bash"
 ```
 
-Claude's built-in tools (Read, Edit, Write, Bash) operate relative to the working directory.
+Set `PROJECT_DIR` in `config/.env` for a default, or override per-plist or inline.
 
 ## Project Structure
 
@@ -114,16 +161,21 @@ Claude's built-in tools (Read, Edit, Write, Bash) operate relative to the workin
 MacPilot/
   agents/              # One .sh file per agent
     example.sh         # Example agent (ships as a template)
-  plists/              # One .plist per agent (launchd schedules)
+    triage-bugs.sh     # BugSnag error triage
+    triage-github.sh   # GitHub issues triage
+    test-xcode-project.sh  # Run Xcode test plans
+  plists/              # One .plist per project/schedule
     com.macpilot.example.plist
+    com.macpilot.triage-bugs.plist
+    com.macpilot.test-xcode-project.plist
   lib/
     macpilot.sh        # Shared library (find claude, load env, run, parse, log, notify)
   config/
-    .env.example       # Template for secrets
+    .env.example       # Template for secrets and project paths
   logs/                # Execution logs (one .log and .err per agent)
   reports/             # Agent output (triage reports, fix plans, etc.)
-  install.sh           # Symlinks plists to ~/Library/LaunchAgents/ and loads them
-  uninstall.sh         # Unloads and removes symlinks
+  install.sh           # Substitutes paths, copies plists to ~/Library/LaunchAgents/, loads them
+  uninstall.sh         # Unloads and removes plists
   CLAUDE.md
 ```
 
@@ -133,28 +185,37 @@ MacPilot/
 # 1. Clone
 git clone ... && cd MacPilot
 
-# 2. Add secrets
+# 2. Add secrets and project paths
 cp config/.env.example config/.env
-# Edit config/.env with your API keys
+# Edit config/.env with your API keys and PROJECT_DIR
 chmod 600 config/.env
 
 # 3. Install schedules
 ./install.sh
 ```
 
-`install.sh` symlinks every plist in `plists/` to `~/Library/LaunchAgents/`, substituting the correct absolute paths, then loads them with `launchctl load`.
+`install.sh` copies every plist in `plists/` to `~/Library/LaunchAgents/`, substituting `__MACPILOT_DIR__` and `__HOME__` with real paths, then loads them with `launchctl bootstrap`.
 
-`uninstall.sh` reverses this — unloads and removes the symlinks.
+`uninstall.sh` reverses this — unloads and removes the plists.
 
 ## Adding a New Agent
 
-1. Create `agents/my-task.sh` — source the lib, call `run_agent` with your prompt
-2. Create `plists/com.macpilot.my-task.plist` — set the schedule
+1. Create `agents/my-task.sh` — source the lib, guard on required env vars, call `run_agent` with your prompt
+2. Create `plists/com.macpilot.my-task.plist` — set the schedule and any `EnvironmentVariables`
 3. Run `./install.sh` to activate it
+
+To reuse an existing script for a different project, just create another plist with different `EnvironmentVariables` pointing to the same script.
+
+## Writing Prompts
+
+- **Be explicit about steps** — numbered steps with exact commands work better than vague instructions
+- **End with a stop instruction** — "After writing the report file, stop immediately. Do not verify, re-read, or do any follow-up work." prevents Claude from burning extra turns
+- **Keep `--max-turns` tight** — 10 is a good default; raise only if the task genuinely needs more steps
+- **Pipe verbose output through `tail`** — e.g. `xcodebuild ... 2>&1 | tail -50` to avoid flooding Claude's context
 
 ## Security
 
-- **No API keys in scripts** — everything goes through `config/.env`, which is `.gitignore`d and `chmod 600`
+- **No secrets or paths in scripts** — everything goes through `config/.env` (gitignored, `chmod 600`) or plist `EnvironmentVariables`
 - **No network exposure** — no servers, no ports, no listeners
 - **Claude CLI handles auth** — no tokens stored by MacPilot
 - **`--max-turns` on every invocation** — prevents runaway agents
@@ -171,53 +232,30 @@ chmod 600 config/.env
 
 ## Example Agents
 
+### Nightly Xcode test run (2 AM)
+
+Runs an Xcode test plan, analyzes failures, and writes a fix plan. Reusable across projects via env vars.
+
+```sh
+PROJECT_DIR=~/Developer/MyApp TEST_PLAN=AllTargets ./agents/test-xcode-project.sh
+```
+
+**You wake up:** notification says "All 295 tests pass" or "3 failures — fix plan written." You open `reports/test-xcode-project-20260220.md` and decide what to act on.
+
 ### Daily BugSnag triage → code plan (8 AM)
 
-The flagship workflow. Fetches the top error, analyzes it in the context of the actual codebase, and writes a fix plan to a local file.
+Fetches the top error, analyzes it in the context of the actual codebase, and writes a fix plan to a local file.
 
 ```sh
-#!/bin/sh
-. "$(dirname "$0")/../lib/macpilot.sh"
-
-cd ~/Developer/MyApp || exit 1
-
-run_agent "Use curl to fetch the top unresolved error from BugSnag \
-(API key is in BUGSNAG_API_KEY env var). Read the relevant source files \
-in this project to understand the context. Write a fix plan to \
-\$MACPILOT_REPORTS/bugsnag-\$(date +%Y%m%d).md with: the error summary, affected files, \
-root cause analysis, and step-by-step fix instructions." \
-  --max-turns 10 \
-  --allowedTools "Read Bash Write"
+PROJECT_DIR=~/Developer/MyApp ./agents/triage-bugs.sh
 ```
 
-**You arrive at 9 AM:** notification says "BugSnag triage done." You open `PLAN-bugsnag-20260219.md` and decide what to act on.
+### GitHub issues triage
 
-### Weekly dependency audit (Monday 9 AM)
-
-```sh
-#!/bin/sh
-. "$(dirname "$0")/../lib/macpilot.sh"
-
-cd ~/Developer/MyApp || exit 1
-
-run_agent "Check for outdated dependencies. List any with known \
-security vulnerabilities. Summarize what should be updated and why." \
-  --max-turns 8 \
-  --allowedTools "Read Bash"
-```
-
-### Hourly git status check
+Fetches all open issues, groups duplicates, ranks by severity, and writes a prioritized triage report.
 
 ```sh
-#!/bin/sh
-. "$(dirname "$0")/../lib/macpilot.sh"
-
-cd ~/Developer/MyApp || exit 1
-
-run_agent "Run git status. If there are uncommitted changes older than \
-24 hours, send a notification reminding me to commit or stash." \
-  --max-turns 3 \
-  --allowedTools "Bash"
+./agents/triage-github.sh
 ```
 
 ## References
