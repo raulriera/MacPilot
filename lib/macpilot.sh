@@ -7,6 +7,7 @@ set -e
 
 MACPILOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 MACPILOT_LOGS="$MACPILOT_DIR/logs"
+MACPILOT_REPORTS="$MACPILOT_DIR/reports"
 MACPILOT_ENV="$MACPILOT_DIR/config/.env"
 
 # Agent name derived from the calling script filename
@@ -117,9 +118,19 @@ run_agent() {
     elif .result then
       .result
     else
-      .
+      empty
     end
-  ' 2>/dev/null)" || text="$result"
+  ' 2>/dev/null)"
+
+  # Handle missing result (e.g. error_max_turns)
+  if [ -z "$text" ]; then
+    subtype="$(echo "$result" | jq -r '.subtype // empty' 2>/dev/null)"
+    if [ -n "$subtype" ]; then
+      text="Agent stopped: $subtype"
+    else
+      text="$result"
+    fi
+  fi
 
   # Log
   echo "[$timestamp] OK" >> "$log_file"
