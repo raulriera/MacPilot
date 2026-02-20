@@ -28,7 +28,7 @@ for plist in "$MACPILOT_DIR"/plists/*.plist; do
   launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
 
   # Substitute placeholder paths and write to LaunchAgents
-  sed "s|__MACPILOT_DIR__|$MACPILOT_DIR|g" "$plist" > "$dest"
+  sed -e "s|__MACPILOT_DIR__|$MACPILOT_DIR|g" -e "s|__HOME__|$HOME|g" "$plist" > "$dest"
 
   # Load
   launchctl bootstrap "gui/$(id -u)" "$dest"

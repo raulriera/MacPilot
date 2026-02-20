@@ -10,8 +10,8 @@ MACPILOT_LOGS="$MACPILOT_DIR/logs"
 MACPILOT_REPORTS="$MACPILOT_DIR/reports"
 MACPILOT_ENV="$MACPILOT_DIR/config/.env"
 
-# Agent name derived from the calling script filename
-AGENT_NAME="$(basename "$0" .sh)"
+# Agent name: override with MACPILOT_AGENT_NAME, otherwise derived from script filename
+AGENT_NAME="${MACPILOT_AGENT_NAME:-$(basename "$0" .sh)}"
 
 # --- Find claude CLI ---
 
@@ -50,7 +50,11 @@ if [ -f "$MACPILOT_ENV" ]; then
     value="${value%\"}"
     value="${value#\'}"
     value="${value%\'}"
-    export "$key=$value"
+    # Don't overwrite vars already set (allows inline overrides)
+    eval "existing=\"\${$key+x}\""
+    if [ -z "$existing" ]; then
+      export "$key=$value"
+    fi
   done < "$MACPILOT_ENV"
 fi
 

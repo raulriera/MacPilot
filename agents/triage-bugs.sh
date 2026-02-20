@@ -1,7 +1,13 @@
 #!/bin/sh
 . "$(dirname "$0")/../lib/macpilot.sh"
 
-cd ~/Developer/MyApp || exit 1
+if [ -z "$PROJECT_DIR" ]; then
+  echo "PROJECT_DIR not set" >&2
+  notify "MacPilot: $AGENT_NAME" "PROJECT_DIR not set. Check .env or plist."
+  exit 1
+fi
+
+cd "$PROJECT_DIR" || exit 1
 
 run_agent "Fetch the top unresolved error from BugSnag and write a fix plan.
 
