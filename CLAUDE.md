@@ -115,6 +115,7 @@ The `.env` file provides defaults. Variables already set in the environment (via
 - **Set up PATH** — prepends Homebrew and Xcode tool directories so launchd jobs find everything
 - **Agent name** — uses `MACPILOT_AGENT_NAME` if set, otherwise derives from script filename
 - **Clear nesting vars** — unsets `CLAUDECODE` / `CLAUDE_CODE_ENTRYPOINT` so agents can be tested from within Claude Code
+- **Sync repo** — `sync_repo` fetches origin, checks out the default branch, and pulls with `--ff-only`. Fails if the working tree is dirty. Project-scoped agents call this after `cd "$PROJECT_DIR"` to stay up to date with the remote.
 - **Call claude** — runs `claude -p "..." --output-format json --no-session-persistence` with sensible defaults and a timeout
 - **Parse output** — pipes through `jq` to extract the text response
 - **Log** — appends timestamped results to the agent's log file
@@ -150,6 +151,7 @@ if [ -z "$PROJECT_DIR" ]; then
 fi
 
 cd "$PROJECT_DIR" || exit 1
+sync_repo || exit 1
 
 run_agent "Find all TODO comments, fix them, and summarize what you did." \
   --max-turns 10 \

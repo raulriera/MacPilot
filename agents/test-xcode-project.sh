@@ -14,6 +14,7 @@ if [ -z "$TEST_PLAN" ]; then
 fi
 
 cd "$PROJECT_DIR" || exit 1
+sync_repo || exit 1
 
 # Optional: SIMULATOR_DESTINATION defaults to iPhone 16
 SIMULATOR_DESTINATION="${SIMULATOR_DESTINATION:-iPhone 16}"

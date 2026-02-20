@@ -8,6 +8,7 @@ if [ -z "$PROJECT_DIR" ]; then
 fi
 
 cd "$PROJECT_DIR" || exit 1
+sync_repo || exit 1
 
 run_agent "Fetch the top unresolved error from BugSnag and write a fix plan.
 

@@ -88,6 +88,28 @@ unset xcode_bin
 
 export PATH
 
+# --- Sync repo ---
+
+# Usage: sync_repo
+# Call after cd "$PROJECT_DIR" to pull the latest default branch.
+# Fails if the working tree is dirty (previous agent may have left changes).
+sync_repo() {
+  if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+    echo "ERROR: dirty working tree in $(pwd)" >&2
+    notify "MacPilot: $AGENT_NAME" "Dirty working tree — skipping sync." "high"
+    return 1
+  fi
+
+  default_branch="$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')"
+  if [ -z "$default_branch" ]; then
+    default_branch="main"
+  fi
+
+  git fetch origin 2>/dev/null
+  git checkout "$default_branch" 2>/dev/null
+  git pull --ff-only 2>/dev/null
+}
+
 # --- Notify ---
 
 # Usage: notify "title" "message" ["priority"]
