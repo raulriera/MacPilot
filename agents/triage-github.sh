@@ -15,6 +15,8 @@ Step 3 — Write a triage report to $MACPILOT_REPORTS/github-\$(date +%Y%m%d).md
   - Issues recommended to close (duplicates, non-actionable) with reasons
   - The single top-priority issue: number, title, and why it matters
   - Root cause analysis of the top issue (if enough context exists)
-  - Step-by-step plan to address it" \
-  --max-turns 15 \
+  - Step-by-step plan to address it
+
+IMPORTANT: After writing the report file, stop immediately. Do not verify, re-read, or do any follow-up work." \
+  --max-turns 10 \
   --allowedTools "Bash Write"

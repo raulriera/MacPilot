@@ -42,7 +42,9 @@ Step 4 — Write a fix plan:
   Write to $MACPILOT_REPORTS/${AGENT_NAME}-\$(date +%Y%m%d).md with:
   - Date and scheme used
   - Total tests run, passed, failed
-  - For each failure: test name, assertion that failed, root cause, and proposed fix with code snippets" \
-  --max-turns 20 \
+  - For each failure: test name, assertion that failed, root cause, and proposed fix with code snippets
+
+IMPORTANT: After writing the report file, stop immediately. Do not verify, re-read, or do any follow-up work." \
+  --max-turns 10 \
   --timeout 900 \
   --allowedTools "Read Bash Write Glob Grep"

@@ -26,6 +26,8 @@ Step 4 — Write a fix plan to $MACPILOT_REPORTS/bugsnag-$(date +%Y%m%d).md with
   - Stack trace summary
   - Affected source files
   - Root cause analysis
-  - Step-by-step fix instructions" \
-  --max-turns 15 \
+  - Step-by-step fix instructions
+
+IMPORTANT: After writing the report file, stop immediately. Do not verify, re-read, or do any follow-up work." \
+  --max-turns 10 \
   --allowedTools "Read Bash Write"
