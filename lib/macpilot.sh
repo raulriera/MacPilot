@@ -50,6 +50,11 @@ if [ -f "$MACPILOT_ENV" ]; then
     value="${value%\"}"
     value="${value#\'}"
     value="${value%\'}"
+    # Expand leading ~ to $HOME
+    case "$value" in
+      "~/"*) value="$HOME/${value#"~/"}" ;;
+      "~")   value="$HOME" ;;
+    esac
     # Don't overwrite vars already set (allows inline overrides)
     eval "existing=\"\${$key+x}\""
     if [ -z "$existing" ]; then
