@@ -13,14 +13,15 @@ A collection of shell scripts that run Claude Code CLI on a schedule via launchd
 - Each agent is a standalone script — easy to read, edit, copy
 - Secrets and project paths live in one `.env` file, never hardcoded
 - Every run is logged with timestamp and result
-- macOS notifications on completion or failure
+- Push notifications via ntfy.sh (with osascript fallback)
+- Works headless on a dedicated Mac Mini — no GUI session required
 - Install/uninstall with one command
 
 ## Interaction Model
 
 Agents are fire-and-forget. They run unattended and produce **local artifacts** you review later:
 
-- **macOS notification** — a summary of what happened (always)
+- **Push notification** — via ntfy.sh if configured, plus osascript locally (always)
 - **Log file** — full output in `logs/` (always)
 - **Reports** — triage reports and fix plans in `reports/` (per agent)
 - **Git branches** — agent creates a local branch with its changes (per agent)
@@ -111,11 +112,13 @@ The `.env` file provides defaults. Variables already set in the environment (via
 
 - **Find claude** — checks `~/.local/bin/claude`, `/usr/local/bin/claude`, `/opt/homebrew/bin/claude`
 - **Load .env** — sources `config/.env` to inject API keys and defaults (skips vars already set, expands `~` to `$HOME`)
+- **Set up PATH** — prepends Homebrew and Xcode tool directories so launchd jobs find everything
 - **Agent name** — uses `MACPILOT_AGENT_NAME` if set, otherwise derives from script filename
+- **Clear nesting vars** — unsets `CLAUDECODE` / `CLAUDE_CODE_ENTRYPOINT` so agents can be tested from within Claude Code
 - **Call claude** — runs `claude -p "..." --output-format json --no-session-persistence` with sensible defaults and a timeout
 - **Parse output** — pipes through `jq` to extract the text response
 - **Log** — appends timestamped results to the agent's log file
-- **Notify** — sends a macOS notification via `osascript` on success or failure
+- **Notify** — sends push notification via ntfy.sh (if `NTFY_TOPIC` is set) and attempts osascript locally
 
 Agents source this library and call `run_agent "prompt"` with optional flag overrides. One function, one line.
 
@@ -168,8 +171,10 @@ MacPilot/
     com.macpilot.example.plist
     com.macpilot.triage-bugs.plist
     com.macpilot.test-xcode-project.plist
+    com.macpilot.rotate-logs.plist
   lib/
     macpilot.sh        # Shared library (find claude, load env, run, parse, log, notify)
+    rotate-logs.sh     # Deletes logs/reports older than 30 days
   config/
     .env.example       # Template for secrets and project paths
   logs/                # Execution logs (one .log and .err per agent)
@@ -213,6 +218,30 @@ To reuse an existing script for a different project, just create another plist w
 - **Keep `--max-turns` tight** — 10 is a good default; raise only if the task genuinely needs more steps
 - **Pipe verbose output through `tail`** — e.g. `xcodebuild ... 2>&1 | tail -50` to avoid flooding Claude's context
 
+## Headless Deployment (Mac Mini)
+
+MacPilot can run on a dedicated Mac Mini with auto-login and no interactive GUI session.
+
+### Notifications via ntfy.sh
+
+Set `NTFY_TOPIC` in `config/.env` to receive push notifications on your phone or main machine. The `notify()` function in `lib/macpilot.sh` POSTs to `${NTFY_SERVER:-https://ntfy.sh}/$NTFY_TOPIC`. Failure notifications are sent with `high` priority.
+
+osascript still fires as a local fallback — it silently fails without a GUI, so no harm on headless machines.
+
+### PATH handling
+
+launchd jobs inherit a minimal PATH. `lib/macpilot.sh` prepends `/opt/homebrew/bin`, `/opt/homebrew/sbin`, `/usr/local/bin`, and the Xcode developer tools directory (via `xcode-select -p`) so that agents and Claude's Bash tool can find `jq`, `git`, `xcodebuild`, etc.
+
+### Running agents from within Claude Code
+
+`lib/macpilot.sh` unsets `CLAUDECODE` and `CLAUDE_CODE_ENTRYPOINT` before invoking the Claude CLI, preventing "cannot be launched inside another session" errors. This makes local testing straightforward.
+
+## Log Rotation
+
+`lib/rotate-logs.sh` deletes files in `logs/` and `reports/` older than 30 days (configurable via `MACPILOT_LOG_RETENTION_DAYS` or a command-line argument). A weekly plist (`com.macpilot.rotate-logs.plist`) runs it every Sunday at 3 AM.
+
+Manual run: `lib/rotate-logs.sh [days]`
+
 ## Security
 
 - **No secrets or paths in scripts** — everything goes through `config/.env` (gitignored, `chmod 600`) or plist `EnvironmentVariables`
@@ -228,7 +257,8 @@ To reuse an existing script for a different project, just create another plist w
 |---|---|---|
 | `claude` | Claude Code CLI | Already installed |
 | `jq` | JSON parsing | `brew install jq` |
-| `osascript` | macOS notifications | Built into macOS |
+| `curl` | ntfy.sh notifications | Built into macOS |
+| `osascript` | Local notifications (fallback) | Built into macOS |
 
 ## Example Agents
 

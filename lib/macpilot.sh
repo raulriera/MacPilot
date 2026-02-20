@@ -63,11 +63,52 @@ if [ -f "$MACPILOT_ENV" ]; then
   done < "$MACPILOT_ENV"
 fi
 
+# --- PATH for launchd ---
+# launchd jobs inherit a minimal PATH. Prepend common tool directories
+# so agents (and Claude's Bash tool) can find homebrew, Xcode, etc.
+
+for dir in /opt/homebrew/bin /opt/homebrew/sbin /usr/local/bin; do
+  if [ -d "$dir" ]; then
+    case ":$PATH:" in
+      *":$dir:"*) ;;
+      *) PATH="$dir:$PATH" ;;
+    esac
+  fi
+done
+
+# Add Xcode developer tools if available
+xcode_bin="$(xcode-select -p 2>/dev/null)/usr/bin"
+if [ -d "$xcode_bin" ]; then
+  case ":$PATH:" in
+    *":$xcode_bin:"*) ;;
+    *) PATH="$xcode_bin:$PATH" ;;
+  esac
+fi
+unset xcode_bin
+
+export PATH
+
 # --- Notify ---
 
+# Usage: notify "title" "message" ["priority"]
+# If NTFY_TOPIC is set, sends a push notification via ntfy.sh.
+# Always attempts osascript as a local fallback (silently fails without GUI).
 notify() {
   title="$1"
   message="$2"
+  priority="${3:-default}"
+
+  # ntfy.sh push notification
+  if [ -n "$NTFY_TOPIC" ]; then
+    ntfy_server="${NTFY_SERVER:-https://ntfy.sh}"
+    curl -sf -o /dev/null \
+      -H "Title: $title" \
+      -H "Priority: $priority" \
+      -d "$message" \
+      "$ntfy_server/$NTFY_TOPIC" 2>/dev/null || true
+  fi
+
+  # osascript fallback (works on local GUI sessions, silently fails headless)
   osascript -e "display notification \"$message\" with title \"$title\"" 2>/dev/null || true
 }
 
@@ -108,6 +149,10 @@ run_agent() {
 
   system_prompt="You are MacPilot, an autonomous agent running a scheduled task on macOS. Execute the task completely without asking for confirmation. Be concise in your final response."
 
+  # Prevent "cannot be launched inside another session" errors when
+  # testing agents from within a Claude Code session.
+  unset CLAUDECODE CLAUDE_CODE_ENTRYPOINT 2>/dev/null || true
+
   # Build and run the command with a timeout to prevent hangs
   tmpfile="$(mktemp)"
   trap 'rm -f "$tmpfile"' EXIT
@@ -139,7 +184,7 @@ run_agent() {
   if [ "$exit_code" -ne 0 ]; then
     echo "[$timestamp] FAILED (exit $exit_code)" >> "$log_file"
     echo "Agent $AGENT_NAME failed (exit $exit_code). See $log_file"
-    notify "MacPilot: $AGENT_NAME" "Agent failed. Check logs."
+    notify "MacPilot: $AGENT_NAME" "Agent failed. Check logs." "high"
     exit 1
   fi
 

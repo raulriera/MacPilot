@@ -11,9 +11,11 @@ LAUNCH_AGENTS="$HOME/Library/LaunchAgents"
 
 mkdir -p "$LAUNCH_AGENTS"
 mkdir -p "$MACPILOT_DIR/logs"
+mkdir -p "$MACPILOT_DIR/reports"
 
-# Make agent scripts executable
+# Make agent and library scripts executable
 chmod +x "$MACPILOT_DIR"/agents/*.sh
+chmod +x "$MACPILOT_DIR"/lib/rotate-logs.sh 2>/dev/null || true
 
 count=0
 
