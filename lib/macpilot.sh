@@ -79,6 +79,7 @@ run_agent() {
   # Defaults (can be overridden via extra args)
   model="sonnet"
   max_turns="10"
+  timeout="300"
 
   # Parse extra args to extract overrides
   extra_args=""
@@ -86,6 +87,7 @@ run_agent() {
     case "$1" in
       --model)     model="$2"; shift 2 ;;
       --max-turns) max_turns="$2"; shift 2 ;;
+      --timeout)   timeout="$2"; shift 2 ;;
       *)           extra_args="$extra_args $1"; shift ;;
     esac
   done
@@ -97,19 +99,40 @@ run_agent() {
 
   system_prompt="You are MacPilot, an autonomous agent running a scheduled task on macOS. Execute the task completely without asking for confirmation. Be concise in your final response."
 
-  # Build and run the command
-  result="$("$CLAUDE_BIN" \
+  # Build and run the command with a timeout to prevent hangs
+  tmpfile="$(mktemp)"
+  trap 'rm -f "$tmpfile"' EXIT
+
+  "$CLAUDE_BIN" \
     -p "$prompt" \
     --output-format json \
     --model "$model" \
     --max-turns "$max_turns" \
     --no-session-persistence \
     --append-system-prompt "$system_prompt" \
-    $extra_args 2>> "$log_file")" || {
-      echo "[$timestamp] FAILED (exit $?)" >> "$log_file"
-      notify "MacPilot: $AGENT_NAME" "Agent failed. Check logs."
-      exit 1
-    }
+    $extra_args > "$tmpfile" 2>> "$log_file" &
+  pid=$!
+
+  # Kill the process if it exceeds the timeout
+  ( sleep "$timeout" && kill "$pid" 2>/dev/null ) &
+  watcher=$!
+
+  wait "$pid" 2>/dev/null && exit_code=0 || exit_code=$?
+
+  # Clean up the watcher
+  kill "$watcher" 2>/dev/null || true
+  wait "$watcher" 2>/dev/null || true
+
+  result="$(cat "$tmpfile")"
+  rm -f "$tmpfile"
+  trap - EXIT
+
+  if [ "$exit_code" -ne 0 ]; then
+    echo "[$timestamp] FAILED (exit $exit_code)" >> "$log_file"
+    echo "Agent $AGENT_NAME failed (exit $exit_code). See $log_file"
+    notify "MacPilot: $AGENT_NAME" "Agent failed. Check logs."
+    exit 1
+  fi
 
   # Parse the text response from JSON output
   text="$(echo "$result" | jq -r '
