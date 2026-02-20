@@ -22,7 +22,7 @@ Agents are fire-and-forget. They run unattended and produce **local artifacts** 
 
 - **macOS notification** — a summary of what happened (always)
 - **Log file** — full output in `logs/` (always)
-- **Files on disk** — a `PLAN.md`, a report, a branch with changes (per agent)
+- **Reports** — triage reports and fix plans in `reports/` (per agent)
 - **Git branches** — agent creates a local branch with its changes (per agent)
 
 Agents never take public-facing actions — no opening GitHub issues, no creating PRs, no posting comments. The repo may be public. Agents work locally and you decide what to publish.
@@ -71,7 +71,7 @@ That's it. macOS runs the script at 8 AM. The script calls Claude, logs the resu
 
 - **Find claude** — checks `~/.local/bin/claude`, `/usr/local/bin/claude`, `/opt/homebrew/bin/claude`
 - **Load .env** — sources `config/.env` to inject API keys into the environment
-- **Call claude** — runs `claude -p "..." --output-format json --no-session-persistence` with sensible defaults
+- **Call claude** — runs `claude -p "..." --output-format json --no-session-persistence` with sensible defaults and a timeout
 - **Parse output** — pipes through `jq` to extract the text response
 - **Log** — appends timestamped results to the agent's log file
 - **Notify** — sends a macOS notification via `osascript` on success or failure
@@ -86,6 +86,7 @@ Agents source this library and call `run_agent "prompt"` with optional flag over
 | `--output-format json` | always | Structured output for `jq` parsing |
 | `--model sonnet` | sonnet | Model selection (sonnet, opus, haiku) |
 | `--max-turns 10` | 10 | Limit agentic turns |
+| `--timeout 300` | 300 (5 min) | Kill the process if it exceeds this many seconds |
 | `--allowedTools` | per agent | Pre-approve tools to avoid prompts |
 | `--no-session-persistence` | always | Don't clutter Claude's session list |
 | `--append-system-prompt` | set by lib | Inject "execute without asking" context |
@@ -120,6 +121,7 @@ MacPilot/
   config/
     .env.example       # Template for secrets
   logs/                # Execution logs (one .log and .err per agent)
+  reports/             # Agent output (triage reports, fix plans, etc.)
   install.sh           # Symlinks plists to ~/Library/LaunchAgents/ and loads them
   uninstall.sh         # Unloads and removes symlinks
   CLAUDE.md
@@ -156,6 +158,7 @@ chmod 600 config/.env
 - **No network exposure** — no servers, no ports, no listeners
 - **Claude CLI handles auth** — no tokens stored by MacPilot
 - **`--max-turns` on every invocation** — prevents runaway agents
+- **`--timeout` on every invocation** — kills hanging processes (default 5 minutes)
 - **Logs are local** — no telemetry, no external reporting
 
 ## Dependencies
@@ -181,7 +184,7 @@ cd ~/Developer/MyApp || exit 1
 run_agent "Use curl to fetch the top unresolved error from BugSnag \
 (API key is in BUGSNAG_API_KEY env var). Read the relevant source files \
 in this project to understand the context. Write a fix plan to \
-PLAN-bugsnag-\$(date +%Y%m%d).md with: the error summary, affected files, \
+\$MACPILOT_REPORTS/bugsnag-\$(date +%Y%m%d).md with: the error summary, affected files, \
 root cause analysis, and step-by-step fix instructions." \
   --max-turns 10 \
   --allowedTools "Read Bash Write"
