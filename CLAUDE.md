@@ -170,14 +170,12 @@ MacPilot/
     triage-github.sh   # GitHub issues triage
     test-xcode-project.sh  # Run Xcode test plans
     improve.sh         # Self-improving meta-agent (proposes changes on a branch)
-    health-check.sh    # Checks all agents ran recently and flags failures
   plists/              # One .plist per project/schedule
     com.macpilot.example.plist
     com.macpilot.triage-bugs.plist
     com.macpilot.test-xcode-project.plist
     com.macpilot.rotate-logs.plist
     com.macpilot.improve.plist
-    com.macpilot.health-check.plist
   lib/
     macpilot.sh        # Shared library (find claude, load env, run, parse, log, notify)
     rotate-logs.sh     # Deletes logs/reports older than 30 days
@@ -313,14 +311,6 @@ Reads `config/goals.md`, recent logs, and reports, then proposes improvements to
 ```
 
 **You review:** `git diff main..improve/20260222`, read `reports/improve-20260222.md`, cherry-pick or merge what you like.
-
-### Daily health check (9 AM)
-
-Inspects all agent log files for stale or failed runs and writes a status report. Configure staleness threshold with `HEALTH_CHECK_STALE_HOURS` (default 48).
-
-```sh
-./agents/health-check.sh
-```
 
 ## References
 

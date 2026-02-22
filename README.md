@@ -114,7 +114,6 @@ MacPilot works on a dedicated Mac Mini with auto-login and no GUI session:
 - **Notifications** go through ntfy.sh — no GUI required
 - **PATH** is set up automatically — Homebrew, Xcode tools, and `/usr/local/bin` are prepended so launchd jobs find everything
 - **Log rotation** runs weekly (Sunday 3 AM) via `com.macpilot.rotate-logs.plist`, deleting logs and reports older than 30 days. Override with `MACPILOT_LOG_RETENTION_DAYS` in `.env`.
-- **Health checks** run daily (9 AM) — inspects all agent logs for stale or failed runs and writes a status report. Tune the staleness threshold with `HEALTH_CHECK_STALE_HOURS` (default 48).
 - **Self-improvement** runs weekly (Sunday 4 AM) — reads your goals from `config/goals.md` and recent logs, then proposes improvements on a git branch you review.
 
 ## Project structure
