@@ -1,6 +1,12 @@
 #!/bin/sh
 . "$(dirname "$0")/../lib/macpilot.sh"
 
+if [ -z "$GITHUB_REPO" ]; then
+  echo "GITHUB_REPO not set" >&2
+  notify "MacPilot: $AGENT_NAME" "GITHUB_REPO not set. Check .env or plist." "high"
+  exit 1
+fi
+
 # Verify gh is authenticated before spending turns on it
 if ! gh auth status >/dev/null 2>&1; then
   echo "ERROR: gh CLI not authenticated" >&2
@@ -8,10 +14,10 @@ if ! gh auth status >/dev/null 2>&1; then
   exit 1
 fi
 
-run_agent "Triage all open issues in the GitHub repo odontome/app.
+run_agent "Triage all open issues in the GitHub repo $GITHUB_REPO.
 
 Step 1 — Fetch all open issues:
-  gh issue list --repo odontome/app --state open --limit 100 --json number,title,body,labels,createdAt,author
+  gh issue list --repo $GITHUB_REPO --state open --limit 100 --json number,title,body,labels,createdAt,author
 
 Step 2 — Analyze every issue:
   - Group duplicates together (note which ones are dupes of which)

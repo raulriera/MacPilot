@@ -210,6 +210,14 @@ chmod 600 config/.env
 
 `uninstall.sh` reverses this — unloads and removes the plists.
 
+## Off-Limits Files
+
+These files exist as templates and references. Agents (including the improve agent) must never modify, schedule, or create plists for them:
+
+- `agents/example.sh` — ships as a starter template for new users
+- `config/.env.example` — template showing available config variables (adding new documented variables is OK)
+- Any file whose sole purpose is documentation or demonstration
+
 ## Adding a New Agent
 
 1. Create `agents/my-task.sh` — source the lib, guard on required env vars, call `run_agent` with your prompt

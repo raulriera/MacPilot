@@ -152,6 +152,7 @@ run_agent() {
   model="sonnet"
   max_turns="10"
   timeout="300"
+  quiet=false
 
   # Parse extra args to extract overrides
   extra_args=""
@@ -160,6 +161,7 @@ run_agent() {
       --model)     model="$2"; shift 2 ;;
       --max-turns) max_turns="$2"; shift 2 ;;
       --timeout)   timeout="$2"; shift 2 ;;
+      --quiet)     quiet=true; shift ;;
       *)           extra_args="$extra_args $1"; shift ;;
     esac
   done
@@ -213,8 +215,8 @@ run_agent() {
   fi
 
   # Parse the text response from JSON output
-  # Note: || true prevents set -e from killing the script on malformed JSON
-  text="$(echo "$result" | jq -r '
+  # Note: printf avoids echo's escape sequence mangling; || true prevents set -e kills
+  text="$(printf '%s\n' "$result" | jq -r '
     if type == "array" then
       map(select(.type == "result")) | last | .result // empty
     elif .result then
@@ -226,7 +228,7 @@ run_agent() {
 
   # Handle missing result (e.g. error_max_turns)
   if [ -z "$text" ]; then
-    subtype="$(echo "$result" | jq -r '.subtype // empty' 2>/dev/null || true)"
+    subtype="$(printf '%s\n' "$result" | jq -r '.subtype // empty' 2>/dev/null || true)"
     if [ -n "$subtype" ]; then
       text="Agent stopped: $subtype"
     else
@@ -235,7 +237,7 @@ run_agent() {
   fi
 
   # Extract turn usage from JSON output
-  turns_used="$(echo "$result" | jq -r '
+  turns_used="$(printf '%s\n' "$result" | jq -r '
     if type == "array" then
       map(select(.type == "result")) | last | .num_turns // empty
     else
@@ -252,10 +254,11 @@ run_agent() {
   echo "$text" >> "$log_file"
   echo "---" >> "$log_file"
 
-  # Notify
-  # Truncate to 200 chars for notification
-  short="$(echo "$text" | head -c 200)"
-  notify "MacPilot: $AGENT_NAME" "$short"
+  # Notify (skip with --quiet for agents that send their own notification)
+  if [ "$quiet" = false ]; then
+    short="$(printf '%s' "$text" | head -c 200)"
+    notify "MacPilot: $AGENT_NAME" "$short"
+  fi
 
   # Print to stdout (captured by launchd into the .log file)
   echo "$text"
