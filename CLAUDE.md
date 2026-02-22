@@ -215,6 +215,7 @@ chmod 600 config/.env
 These files exist as templates and references. Agents (including the improve agent) must never modify, schedule, or create plists for them:
 
 - `agents/example.sh` — ships as a starter template for new users
+- `config/.env` — contains secrets and user-specific paths
 - `config/.env.example` — template showing available config variables (adding new documented variables is OK)
 - Any file whose sole purpose is documentation or demonstration
 

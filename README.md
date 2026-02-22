@@ -13,7 +13,7 @@ Each agent is a `.sh` file with a prompt and a `.plist` that tells macOS when to
 ## Setup
 
 ```sh
-git clone https://github.com/nicklama/MacPilot.git
+git clone https://github.com/raulriera/MacPilot.git
 cd MacPilot
 
 # Create your config from the template
