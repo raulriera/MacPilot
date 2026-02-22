@@ -51,8 +51,8 @@ Step 3 — Write a summary report to reports/improve-$TODAY.md with:
   - Suggestions you chose not to implement and why
 
 IMPORTANT: After writing the report file, stop immediately. Do not verify, re-read, or do any follow-up work." \
-  --max-turns 35 \
-  --timeout 600 \
+  --max-turns 40 \
+  --timeout 900 \
   --allowedTools "Read Edit Write Bash Glob Grep"
 
 # Commit any changes the agent made in the worktree

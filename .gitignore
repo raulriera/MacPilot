@@ -3,4 +3,5 @@ logs/
 reports/
 .DS_Store
 *.profraw
+.worktrees/
 .claude/

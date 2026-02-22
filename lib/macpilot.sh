@@ -203,14 +203,17 @@ run_agent() {
   rm -f "$tmpfile"
   trap - EXIT
 
+  result_timestamp="$(date '+%Y-%m-%d %H:%M:%S')"
+
   if [ "$exit_code" -ne 0 ]; then
-    echo "[$timestamp] FAILED (exit $exit_code)" >> "$log_file"
+    echo "[$result_timestamp] FAILED (exit $exit_code)" >> "$log_file"
     echo "Agent $AGENT_NAME failed (exit $exit_code). See $log_file"
     notify "MacPilot: $AGENT_NAME" "Agent failed. Check logs." "high"
     exit 1
   fi
 
   # Parse the text response from JSON output
+  # Note: || true prevents set -e from killing the script on malformed JSON
   text="$(echo "$result" | jq -r '
     if type == "array" then
       map(select(.type == "result")) | last | .result // empty
@@ -219,11 +222,11 @@ run_agent() {
     else
       empty
     end
-  ' 2>/dev/null)"
+  ' 2>/dev/null || true)"
 
   # Handle missing result (e.g. error_max_turns)
   if [ -z "$text" ]; then
-    subtype="$(echo "$result" | jq -r '.subtype // empty' 2>/dev/null)"
+    subtype="$(echo "$result" | jq -r '.subtype // empty' 2>/dev/null || true)"
     if [ -n "$subtype" ]; then
       text="Agent stopped: $subtype"
     else
@@ -238,13 +241,13 @@ run_agent() {
     else
       .num_turns // empty
     end
-  ' 2>/dev/null)"
+  ' 2>/dev/null || true)"
 
   # Log
   if [ -n "$turns_used" ]; then
-    echo "[$timestamp] OK (turns: $turns_used/$max_turns)" >> "$log_file"
+    echo "[$result_timestamp] OK (turns: $turns_used/$max_turns)" >> "$log_file"
   else
-    echo "[$timestamp] OK" >> "$log_file"
+    echo "[$result_timestamp] OK" >> "$log_file"
   fi
   echo "$text" >> "$log_file"
   echo "---" >> "$log_file"
