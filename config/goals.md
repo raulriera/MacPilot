@@ -5,19 +5,22 @@ and treats each bullet or section as an independent goal.
 
 <!-- Example goals (uncomment and edit to use):
 
-## Agents
-- Add a new agent that checks for outdated Swift package dependencies
-- The triage-bugs agent should group errors by module before writing the report
-
 ## Prompts
-- test-xcode-project prompt should include the scheme name in the report title
+- Agent X should include more context in its report
 - All agents should mention the git commit SHA they ran against
 
 ## Schedules
-- Run the test agent twice a day (morning and evening) instead of once
+- Run agent Y twice a day instead of once
 
 ## General
-- Add a health-check agent that verifies all other agents ran recently
-- Reduce max-turns on triage agents from 10 to 8
+- Add a new agent that does Z
+- Reduce max-turns on a specific agent
 
 -->
+
+## Standing goals (always apply)
+- If any agent hit error_max_turns recently, increase its --max-turns by 5
+- If any agent shows repeated failures in logs, add a pre-flight guard to fail fast before calling run_agent
+- If any agent prompt is vague or missing explicit steps, rewrite it with numbered steps and exact commands
+- If an agent's --timeout is too tight for its task (killed before finishing), increase it
+- Do not make changes if all agents are running cleanly — write the report noting everything is healthy and stop
