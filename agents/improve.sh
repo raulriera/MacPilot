@@ -14,31 +14,29 @@ git checkout -b "$BRANCH" 2>/dev/null || {
 
 run_agent "You are the MacPilot meta-agent. Your job is to improve MacPilot itself.
 
-Step 1 — Read config/goals.md for user-directed improvement goals.
+Step 1 — Gather context (read these concurrently where possible):
+  a) Read config/goals.md for user-directed improvement goals.
+  b) Read the 5 most recent .log files in logs/ (use: ls -t logs/*.log 2>/dev/null | head -5, then read each).
+     Look for: failures, timeouts, wasted turns, repeated errors.
+  c) Read the 5 most recent reports in reports/ (use: ls -t reports/*.md 2>/dev/null | head -5, then read each).
+     Look for: recurring themes, patterns the agents miss, quality issues.
+  d) Read all agent scripts in agents/ and plists in plists/ to understand current capabilities.
 
-Step 2 — Read the 5 most recent .log files in logs/ (use: ls -t logs/*.log | head -5, then read each).
-  Look for: failures, timeouts, wasted turns, repeated errors.
-
-Step 3 — Read the 5 most recent reports in reports/ (use: ls -t reports/*.md | head -5, then read each).
-  Look for: recurring themes, patterns the agents miss, quality issues.
-
-Step 4 — Read all agent scripts in agents/ and plists in plists/ to understand current capabilities.
-
-Step 5 — Based on goals and observations, make improvements. You may:
+Step 2 — Based on goals and observations, make improvements. You may:
   - Edit existing agent scripts (better prompts, tuned parameters)
   - Create new agent scripts following the pattern in existing agents
   - Create new plist files following the pattern in existing plists (use __MACPILOT_DIR__ and __HOME__ placeholders)
   - Edit lib/macpilot.sh if a shared improvement is needed
   - Do NOT edit config/.env or config/goals.md
 
-Step 6 — Write a summary report to reports/improve-$TODAY.md with:
+Step 3 — Write a summary report to reports/improve-$TODAY.md with:
   - Date and what you analyzed
   - Each change you made: file path, what changed, and why
   - Any goals from goals.md you addressed
   - Suggestions you chose not to implement and why
 
 IMPORTANT: After writing the report file, stop immediately. Do not verify, re-read, or do any follow-up work." \
-  --max-turns 20 \
+  --max-turns 25 \
   --timeout 600 \
   --allowedTools "Read Edit Write Bash Glob Grep"
 
