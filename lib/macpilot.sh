@@ -231,8 +231,21 @@ run_agent() {
     fi
   fi
 
+  # Extract turn usage from JSON output
+  turns_used="$(echo "$result" | jq -r '
+    if type == "array" then
+      map(select(.type == "result")) | last | .num_turns // empty
+    else
+      .num_turns // empty
+    end
+  ' 2>/dev/null)"
+
   # Log
-  echo "[$timestamp] OK" >> "$log_file"
+  if [ -n "$turns_used" ]; then
+    echo "[$timestamp] OK (turns: $turns_used/$max_turns)" >> "$log_file"
+  else
+    echo "[$timestamp] OK" >> "$log_file"
+  fi
   echo "$text" >> "$log_file"
   echo "---" >> "$log_file"
 
