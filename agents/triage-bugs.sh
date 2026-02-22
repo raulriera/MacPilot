@@ -7,6 +7,18 @@ if [ -z "$PROJECT_DIR" ]; then
   exit 1
 fi
 
+if [ -z "$BUGSNAG_API_KEY" ]; then
+  echo "BUGSNAG_API_KEY not set" >&2
+  notify "MacPilot: $AGENT_NAME" "BUGSNAG_API_KEY not set. Check .env or plist."
+  exit 1
+fi
+
+if [ -z "$BUGSNAG_PROJECT_ID" ]; then
+  echo "BUGSNAG_PROJECT_ID not set" >&2
+  notify "MacPilot: $AGENT_NAME" "BUGSNAG_PROJECT_ID not set. Check .env or plist."
+  exit 1
+fi
+
 cd "$PROJECT_DIR" || exit 1
 sync_repo || exit 1
 

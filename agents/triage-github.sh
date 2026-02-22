@@ -1,6 +1,13 @@
 #!/bin/sh
 . "$(dirname "$0")/../lib/macpilot.sh"
 
+# Verify gh is authenticated before spending turns on it
+if ! gh auth status >/dev/null 2>&1; then
+  echo "ERROR: gh CLI not authenticated" >&2
+  notify "MacPilot: $AGENT_NAME" "gh CLI not authenticated. Run: gh auth login" "high"
+  exit 1
+fi
+
 run_agent "Triage all open issues in the GitHub repo odontome/app.
 
 Step 1 — Fetch all open issues:
