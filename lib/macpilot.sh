@@ -127,7 +127,10 @@ sync_repo() {
 # Usage: notify "title" "message" ["priority"]
 # If NTFY_TOPIC is set, sends a push notification via ntfy.sh.
 # Always attempts osascript as a local fallback (silently fails without GUI).
+# Set MACPILOT_NOTIFY=false in .env to disable all notifications.
 notify() {
+  case "${MACPILOT_NOTIFY:-}" in false|no|0) return ;; esac
+
   # Sanitize inputs: strip newlines (HTTP header injection) and
   # escape double-quotes/backslashes (AppleScript injection)
   title="$(printf '%s' "$1" | tr -d '\r\n')"
