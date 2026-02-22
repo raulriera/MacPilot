@@ -109,7 +109,7 @@ Agents can be tested from inside a Claude Code session — the library clears ne
 
 ## Headless deployment
 
-MacPilot works on a dedicated Mac Mini with auto-login and no GUI session:
+MacPilot works with no GUI session:
 
 - **Notifications** go through ntfy.sh — no GUI required
 - **PATH** is set up automatically — Homebrew, Xcode tools, and `/usr/local/bin` are prepended so launchd jobs find everything

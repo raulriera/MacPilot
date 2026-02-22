@@ -13,6 +13,14 @@ mkdir -p "$LAUNCH_AGENTS"
 mkdir -p "$MACPILOT_DIR/logs"
 mkdir -p "$MACPILOT_DIR/reports"
 
+# Restrict permissions on dirs that may contain sensitive output
+chmod 700 "$MACPILOT_DIR/logs" "$MACPILOT_DIR/reports"
+
+# Enforce restrictive permissions on .env (contains API keys)
+if [ -f "$MACPILOT_DIR/config/.env" ]; then
+  chmod 600 "$MACPILOT_DIR/config/.env"
+fi
+
 # Make agent and library scripts executable
 chmod +x "$MACPILOT_DIR"/agents/*.sh
 chmod +x "$MACPILOT_DIR"/lib/rotate-logs.sh 2>/dev/null || true

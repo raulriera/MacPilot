@@ -14,10 +14,27 @@ if ! gh auth status >/dev/null 2>&1; then
   exit 1
 fi
 
+# Fetch issues in shell (outside Claude) to avoid passing untrusted data
+# through a prompt that has Bash access.
+issues_file="$(mktemp)"
+trap 'rm -f "$issues_file"' EXIT INT TERM
+
+gh issue list --repo "$GITHUB_REPO" --state open --limit 100 \
+  --json number,title,body,labels,createdAt,author > "$issues_file" 2>/dev/null
+
+if [ ! -s "$issues_file" ]; then
+  echo "No open issues or failed to fetch from $GITHUB_REPO" >&2
+  notify "MacPilot: $AGENT_NAME" "No open issues or fetch failed for $GITHUB_REPO."
+  rm -f "$issues_file"
+  trap - EXIT INT TERM
+  exit 0
+fi
+
 run_agent "Triage all open issues in the GitHub repo $GITHUB_REPO.
 
-Step 1 — Fetch all open issues:
-  gh issue list --repo $GITHUB_REPO --state open --limit 100 --json number,title,body,labels,createdAt,author
+The issues have already been fetched and saved to $issues_file. Read that file to get the issue data (JSON array with number, title, body, labels, createdAt, author).
+
+Step 1 — Read $issues_file to load all open issues.
 
 Step 2 — Analyze every issue:
   - Group duplicates together (note which ones are dupes of which)
@@ -32,4 +49,7 @@ Step 3 — Write a triage report to $MACPILOT_REPORTS/github-\$(date +%Y%m%d).md
 
 IMPORTANT: After writing the report file, stop immediately. Do not verify, re-read, or do any follow-up work." \
   --max-turns 10 \
-  --allowedTools "Bash Write"
+  --allowedTools "Read Write"
+
+rm -f "$issues_file"
+trap - EXIT INT TERM
