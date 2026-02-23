@@ -66,7 +66,7 @@ Claude has the full project context via CLAUDE.md and will create the script, pl
 ./agents/example.sh
 
 # Override per-run
-PROJECT_DIR=~/Developer/OtherApp TEST_PLAN=UnitTests ./agents/test-xcode-project.sh
+PROJECT_DIR=~/Developer/OtherApp ./agents/test-xcode-project.sh
 ```
 
 Agents can be tested from inside a Claude Code session — the library clears nesting env vars automatically.
