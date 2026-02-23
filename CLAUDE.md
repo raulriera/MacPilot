@@ -298,7 +298,7 @@ Runs an Xcode test plan, analyzes failures, and writes a fix plan. Reusable acro
 PROJECT_DIR=~/Developer/MyApp TEST_PLAN=AllTargets ./agents/test-xcode-project.sh
 ```
 
-**You wake up:** notification says "All 295 tests pass" or "3 failures — fix plan written." You open `reports/test-xcode-project-20260220.md` and decide what to act on.
+**You wake up:** notification says "All 295 tests pass" or "3 failures — fix plan written." You open the report in `reports/` and decide what to act on.
 
 ### Daily BugSnag triage → code plan (8 AM)
 
