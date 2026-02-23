@@ -53,47 +53,11 @@ You can self-host ntfy and point to it with `NTFY_SERVER=https://ntfy.example.co
 
 ## Adding an agent
 
-**1. Write the script** — `agents/my-task.sh`:
+Open Claude Code in the MacPilot directory and describe what you want:
 
-```sh
-#!/bin/sh
-. "$(dirname "$0")/../lib/macpilot.sh"
+> "Create an agent that summarizes the git log from the past week and runs every Monday at 9 AM"
 
-run_agent "Summarize the git log from the past week." \
-  --max-turns 3 \
-  --allowedTools "Bash"
-```
-
-**2. Write the plist** — `plists/com.macpilot.my-task.plist`:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
-  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key>
-  <string>com.macpilot.my-task</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>__MACPILOT_DIR__/agents/my-task.sh</string>
-  </array>
-  <key>StartCalendarInterval</key>
-  <dict>
-    <key>Hour</key><integer>9</integer>
-    <key>Minute</key><integer>0</integer>
-  </dict>
-  <key>StandardOutPath</key>
-  <string>__MACPILOT_DIR__/logs/my-task.out</string>
-  <key>StandardErrorPath</key>
-  <string>__MACPILOT_DIR__/logs/my-task.err</string>
-</dict>
-</plist>
-```
-
-**3. Install:** `./install.sh`
-
-To reuse one script across multiple projects, create additional plists with different `EnvironmentVariables` (e.g. `PROJECT_DIR`, `MACPILOT_AGENT_NAME`).
+Claude has the full project context via CLAUDE.md and will create the script, plist, and wire everything up. Run `./install.sh` to activate it.
 
 ## Running manually
 
