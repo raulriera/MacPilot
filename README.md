@@ -1,8 +1,14 @@
-# MacPilot
+```
+  __  __            ____  _ _       _
+ |  \/  | __ _  ___|  _ \(_) | ___ | |_
+ | |\/| |/ _` |/ __| |_) | | |/ _ \| __|
+ | |  | | (_| | (__|  __/| | | (_) | |_
+ |_|  |_|\__,_|\___|_|   |_|_|\___/ \__|
+```
 
 Scheduled autonomous Claude agents for macOS. Shell scripts + launchd, nothing else.
 
-Each agent is a `.sh` file with a prompt and a `.plist` that tells macOS when to run it. Agents produce local artifacts — log files, reports, git branches — and send you a push notification when done. You review the results and decide what to publish.
+Each agent is a `.sh` file with a prompt and a `.plist` that tells macOS when to run it. Agents produce local artifacts — log files, reports, git branches — and send you a push notification when done. You review the results and decide what to publish. It even improves itself — a meta-agent reads your goals and recent logs, then proposes changes on a branch for you to review.
 
 ## Requirements
 
@@ -70,15 +76,6 @@ PROJECT_DIR=~/Developer/OtherApp ./agents/test-xcode-project.sh
 ```
 
 Agents can be tested from inside a Claude Code session — the library clears nesting env vars automatically.
-
-## Headless deployment
-
-MacPilot works with no GUI session:
-
-- **Notifications** go through ntfy.sh — no GUI required
-- **PATH** is set up automatically — Homebrew, Xcode tools, and `/usr/local/bin` are prepended so launchd jobs find everything
-- **Log rotation** runs weekly (Sunday 3 AM) via `com.macpilot.rotate-logs.plist`, deleting logs and reports older than 30 days. Override with `MACPILOT_LOG_RETENTION_DAYS` in `.env`.
-- **Self-improvement** runs weekly (Sunday 4 AM) — reads your goals from `config/goals.md` and recent logs, then proposes improvements on a git branch you review.
 
 ## Project structure
 
