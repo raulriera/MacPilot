@@ -1,4 +1,7 @@
 #!/bin/sh
+# Required: PROJECT_DIR — path to the project codebase
+# Required: BUGSNAG_API_KEY — BugSnag API token
+# Required: BUGSNAG_PROJECT_ID — BugSnag project ID
 . "$(dirname "$0")/../lib/macpilot.sh"
 
 if [ -z "$PROJECT_DIR" ]; then

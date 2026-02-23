@@ -123,6 +123,8 @@ The `.env` file provides defaults. Variables already set in the environment (via
 
 Agents source this library and call `run_agent "prompt"` with optional flag overrides. One function, one line.
 
+Every section in `lib/macpilot.sh` has a doc comment block (between the `# --- Section ---` header and the code) that explains what it does, why, and any non-obvious behavior. When you modify a section, update its doc comment to reflect the change. When you add a new section, include a doc comment following the same pattern.
+
 ### Claude CLI flags
 
 | Flag | Default | Purpose |
@@ -224,6 +226,18 @@ These files exist as templates and references. Agents (including the improve age
 3. Run `./install.sh` to activate it
 
 To reuse an existing script for a different project, just create another plist with different `EnvironmentVariables` pointing to the same script.
+
+Every agent script must document its environment variables in comments at the top of the file, between the shebang and the library source line. Mark each variable as `Required` or `Optional` with a short description. Optional variables with defaults should note the default value.
+
+Prefer making environment variables optional with sensible defaults over requiring them. Use `${VAR:-default}` for defaults and `${VAR:+...}` to conditionally include flags. Only guard with `exit 1` on variables the agent truly cannot function without.
+
+```sh
+#!/bin/sh
+# Required: PROJECT_DIR — path to the Xcode project
+# Optional: TEST_PLAN — test plan name (omit to run all tests)
+# Optional: SIMULATOR_DESTINATION — simulator device (default: iPhone 16)
+. "$(dirname "$0")/../lib/macpilot.sh"
+```
 
 ## Writing Prompts
 

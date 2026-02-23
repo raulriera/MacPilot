@@ -1,4 +1,7 @@
 #!/bin/sh
+# Required: PROJECT_DIR — path to the Xcode project
+# Optional: TEST_PLAN — test plan name (omit to run all tests)
+# Optional: SIMULATOR_DESTINATION — simulator device (default: iPhone 16)
 . "$(dirname "$0")/../lib/macpilot.sh"
 
 if [ -z "$PROJECT_DIR" ]; then
@@ -7,16 +10,9 @@ if [ -z "$PROJECT_DIR" ]; then
   exit 1
 fi
 
-if [ -z "$TEST_PLAN" ]; then
-  echo "TEST_PLAN not set" >&2
-  notify "MacPilot: $AGENT_NAME" "TEST_PLAN not set. Check .env or plist."
-  exit 1
-fi
-
 cd "$PROJECT_DIR" || exit 1
 sync_repo || exit 1
 
-# Optional: SIMULATOR_DESTINATION defaults to iPhone 16
 SIMULATOR_DESTINATION="${SIMULATOR_DESTINATION:-iPhone 16}"
 
 run_agent "Run the Xcode tests for this project and propose fixes for any failures.
@@ -24,7 +20,7 @@ run_agent "Run the Xcode tests for this project and propose fixes for any failur
 Step 1 — Run the tests:
   xcodebuild test \
     -scheme \$(xcodebuild -list -json | jq -r '.project.schemes[0]') \
-    -testPlan $TEST_PLAN \
+    ${TEST_PLAN:+-testPlan $TEST_PLAN} \
     -destination 'platform=iOS Simulator,name=$SIMULATOR_DESTINATION' \
     2>&1 | tail -50
 

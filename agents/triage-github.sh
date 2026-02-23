@@ -1,4 +1,5 @@
 #!/bin/sh
+# Required: GITHUB_REPO — GitHub repo in owner/name format
 . "$(dirname "$0")/../lib/macpilot.sh"
 
 if [ -z "$GITHUB_REPO" ]; then

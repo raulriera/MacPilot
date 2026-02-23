@@ -1,4 +1,5 @@
 #!/bin/sh
+# No additional env vars — operates on the MacPilot repo itself
 . "$(dirname "$0")/../lib/macpilot.sh"
 
 cd "$MACPILOT_DIR" || exit 1
