@@ -172,18 +172,21 @@ MacPilot/
     triage-github.sh   # GitHub issues triage
     test-xcode-project.sh  # Run Xcode test plans
     improve.sh         # Self-improving meta-agent (proposes changes on a branch)
+    digest.sh          # Weekly Reddit + HN digest per topic
   plists/              # One .plist per project/schedule
     com.macpilot.example.plist
     com.macpilot.triage-bugs.plist
     com.macpilot.test-xcode-project.plist
     com.macpilot.rotate-logs.plist
     com.macpilot.improve.plist
+    com.macpilot.digest.plist
   lib/
     macpilot.sh        # Shared library (find claude, load env, run, parse, log, notify)
     rotate-logs.sh     # Deletes logs/reports older than 30 days
   config/
     .env.example       # Template for secrets and project paths
     goals.md           # User-directed improvement goals for the meta-agent
+  tmp/                 # Temporary data files (cleaned up after each run)
   logs/                # Execution logs (one .log and .err per agent)
   reports/             # Agent output (triage reports, fix plans, etc.)
   install.sh           # Substitutes paths, copies plists to ~/Library/LaunchAgents/, loads them
@@ -325,6 +328,16 @@ Reads `config/goals.md`, recent logs, and reports, then proposes improvements to
 ```
 
 **You review:** `git diff main..improve/20260222`, read `reports/improve-20260222.md`, cherry-pick or merge what you like.
+
+### Weekly Reddit + HN digest (Friday 6 PM)
+
+Fetches top posts from Reddit and Hacker News for each topic, then writes a digest report per topic.
+
+```sh
+DIGEST_TOPICS="AI LLM,Swift iOS development" ./agents/digest.sh
+```
+
+**Friday evening:** you get a notification per topic. Open `reports/digest-ai-llm-<date>.md` and `reports/digest-swift-ios-development-<date>.md` to catch up on the week.
 
 ## References
 

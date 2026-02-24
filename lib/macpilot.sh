@@ -15,7 +15,10 @@ umask 077
 MACPILOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 MACPILOT_LOGS="$MACPILOT_DIR/logs"
 MACPILOT_REPORTS="$MACPILOT_DIR/reports"
+MACPILOT_TMP="$MACPILOT_DIR/tmp"
 MACPILOT_ENV="$MACPILOT_DIR/config/.env"
+
+mkdir -p "$MACPILOT_LOGS" "$MACPILOT_REPORTS" "$MACPILOT_TMP"
 
 AGENT_NAME="${MACPILOT_AGENT_NAME:-$(basename "$0" .sh)}"
 
