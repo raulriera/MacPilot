@@ -17,7 +17,7 @@ fi
 
 # Fetch issues in shell (outside Claude) to avoid passing untrusted data
 # through a prompt that has Bash access.
-issues_file="$(mktemp)"
+issues_file="$MACPILOT_TMP/github-issues.json"
 trap 'rm -f "$issues_file"' EXIT INT TERM
 
 gh issue list --repo "$GITHUB_REPO" --state open --limit 100 \

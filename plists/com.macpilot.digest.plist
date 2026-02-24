@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.macpilot.digest</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>MACPILOT_AGENT_NAME</key>
+    <string>digest</string>
+    <key>DIGEST_TOPICS</key>
+    <string>AI LLM,Swift iOS development</string>
+  </dict>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__MACPILOT_DIR__/agents/digest.sh</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>5</integer>
+    <key>Hour</key>
+    <integer>18</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>__MACPILOT_DIR__/logs/digest.out</string>
+  <key>StandardErrorPath</key>
+  <string>__MACPILOT_DIR__/logs/digest.err</string>
+</dict>
+</plist>

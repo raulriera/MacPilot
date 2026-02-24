@@ -27,7 +27,7 @@ sync_repo || exit 1
 
 # Fetch BugSnag data in shell (outside Claude) to avoid passing untrusted
 # external data through a prompt that has Bash access.
-bugsnag_file="$(mktemp)"
+bugsnag_file="$MACPILOT_TMP/bugsnag-data.json"
 trap 'rm -f "$bugsnag_file"' EXIT INT TERM
 
 # Get the top error

@@ -12,9 +12,10 @@ LAUNCH_AGENTS="$HOME/Library/LaunchAgents"
 mkdir -p "$LAUNCH_AGENTS"
 mkdir -p "$MACPILOT_DIR/logs"
 mkdir -p "$MACPILOT_DIR/reports"
+mkdir -p "$MACPILOT_DIR/tmp"
 
 # Restrict permissions on dirs that may contain sensitive output
-chmod 700 "$MACPILOT_DIR/logs" "$MACPILOT_DIR/reports"
+chmod 700 "$MACPILOT_DIR/logs" "$MACPILOT_DIR/reports" "$MACPILOT_DIR/tmp"
 
 # Enforce restrictive permissions on .env (contains API keys)
 if [ -f "$MACPILOT_DIR/config/.env" ]; then

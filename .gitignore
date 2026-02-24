@@ -1,6 +1,7 @@
 config/.env
 logs/
 reports/
+tmp/
 .DS_Store
 *.profraw
 .worktrees/
