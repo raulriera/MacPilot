@@ -1,8 +1,12 @@
 #!/bin/sh
 # Installs MacPilot agent schedules into launchd.
 #
-# For each .plist in plists/, substitutes __MACPILOT_DIR__ with the
+# For each selected .plist in plists/, substitutes __MACPILOT_DIR__ with the
 # actual project path, writes to ~/Library/LaunchAgents/, and loads it.
+#
+# Usage:
+#   ./install.sh          # Interactive — choose which agents to install
+#   ./install.sh --all    # Install all agents without prompting
 
 set -e
 
@@ -26,10 +30,63 @@ fi
 chmod +x "$MACPILOT_DIR"/agents/*.sh
 chmod +x "$MACPILOT_DIR"/lib/rotate-logs.sh 2>/dev/null || true
 
+# --- Selection ---
+# When run without --all, displays a numbered list of available agents
+# and lets the user pick which ones to install. Enter space-separated
+# numbers, 'a' for all, or 'q' to quit.
+
+select_all=false
+if [ "${1:-}" = "--all" ]; then
+  select_all=true
+fi
+
+# Check if a number is in the user's selection
+is_selected() {
+  if "$select_all"; then return 0; fi
+  for _s in $selection; do
+    [ "$_s" = "$1" ] && return 0
+  done
+  return 1
+}
+
+if ! "$select_all"; then
+  # Display available agents
+  total=0
+  for plist in "$MACPILOT_DIR"/plists/*.plist; do
+    [ -f "$plist" ] || continue
+    total=$((total + 1))
+    agent="$(basename "$plist" .plist | sed 's/^com\.macpilot\.//')"
+    printf "  %d) %s\n" "$total" "$agent"
+  done
+
+  if [ "$total" -eq 0 ]; then
+    echo "No plists found in plists/. Add one and re-run."
+    exit 0
+  fi
+
+  printf "\nSelect agents to install (space-separated numbers, 'a' for all, 'q' to quit): "
+  read -r selection
+
+  if [ "$selection" = "q" ]; then
+    echo "Cancelled."
+    exit 0
+  fi
+
+  if [ "$selection" = "a" ]; then
+    select_all=true
+  fi
+fi
+
+# --- Install selected plists ---
+
 count=0
+i=0
 
 for plist in "$MACPILOT_DIR"/plists/*.plist; do
   [ -f "$plist" ] || continue
+  i=$((i + 1))
+
+  is_selected "$i" || continue
 
   name="$(basename "$plist")"
   dest="$LAUNCH_AGENTS/$name"
@@ -49,7 +106,7 @@ for plist in "$MACPILOT_DIR"/plists/*.plist; do
 done
 
 if [ "$count" -eq 0 ]; then
-  echo "No plists found in plists/. Add one and re-run."
+  echo "No agents installed."
 else
   echo "Done. $count agent(s) installed."
 fi

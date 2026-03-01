@@ -47,7 +47,13 @@ Install the schedules:
 ./install.sh
 ```
 
-This copies each plist to `~/Library/LaunchAgents/`, substitutes paths, and loads them into launchd. To remove everything: `./uninstall.sh`.
+You'll see a list of available agents — pick the ones you want by number, or type `a` to install all of them. To skip the prompt (useful for automation), pass `--all`:
+
+```sh
+./install.sh --all
+```
+
+To remove agents, run `./uninstall.sh` — same interactive menu, same `--all` flag.
 
 ## Notifications
 
