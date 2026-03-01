@@ -42,7 +42,7 @@ Step 2 — Analyze every issue:
   - Flag issues that are non-actionable, stale, or too vague
   - Rank the remaining issues by severity and impact
 
-Step 3 — Write a triage report to $MACPILOT_REPORTS/github-\$(date +%Y%m%d).md with:
+Step 3 — Write a triage report to $MACPILOT_REPORTS/github-$(date +%Y%m%d).md with:
   - Issues recommended to close (duplicates, non-actionable) with reasons
   - The single top-priority issue: number, title, and why it matters
   - Root cause analysis of the top issue (if enough context exists)
