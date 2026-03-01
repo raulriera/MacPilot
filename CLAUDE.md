@@ -356,6 +356,14 @@ DIGEST_TOPICS="AI LLM,Swift iOS development" ./agents/digest.sh
 
 **Friday evening:** you get a notification per topic. Open `reports/digest-ai-llm-<date>.md` and `reports/digest-swift-ios-development-<date>.md` to catch up on the week.
 
+## Releases
+
+GitHub releases must use the auto-generated template format. When creating a release with `gh release create`, use `--generate-notes` to let GitHub produce the "What's Changed" section with PR links and the "Full Changelog" compare URL. Do not write custom release notes.
+
+```sh
+gh release create v0.X.Y --generate-notes
+```
+
 ## References
 
 - [Claude Code CLI Reference](https://docs.anthropic.com/en/docs/claude-code/cli-usage)
