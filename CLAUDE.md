@@ -189,6 +189,7 @@ MacPilot/
   tmp/                 # Temporary data files (cleaned up after each run)
   logs/                # Execution logs (one .log and .err per agent)
   reports/             # Agent output (triage reports, fix plans, etc.)
+  test.sh              # Test suite — run before pushing (./test.sh)
   install.sh           # Substitutes paths, copies plists to ~/Library/LaunchAgents/, loads them
   uninstall.sh         # Unloads and removes plists
   CLAUDE.md
@@ -222,11 +223,27 @@ These files exist as templates and references. Agents (including the improve age
 - `config/.env.example` — template showing available config variables (adding new documented variables is OK)
 - Any file whose sole purpose is documentation or demonstration
 
+## Testing
+
+`test.sh` is a lightweight test suite that validates syntax, plist structure, selection logic, .env parsing, and agent env var guards. It runs in ~1 second with no external dependencies (no claude, no launchctl, no network).
+
+```sh
+./test.sh
+```
+
+Run `./test.sh` before every push. When adding or modifying agents, library code, or plists, update `test.sh` to cover the new behavior. Specifically:
+
+- **New agent** — add an env var guard test (section 7) that verifies it exits nonzero without its required env vars
+- **New plist** — automatically covered by syntax/placeholder checks (sections 2 and 5)
+- **Changes to `lib/macpilot.sh`** — add or update tests for the affected parsing/logic (section 6 for .env, section 3 for selection, etc.)
+- **Changes to `install.sh` / `uninstall.sh`** — update selection or substitution tests as needed (sections 3-5)
+
 ## Adding a New Agent
 
 1. Create `agents/my-task.sh` — source the lib, guard on required env vars, call `run_agent` with your prompt
 2. Create `plists/com.macpilot.my-task.plist` — set the schedule and any `EnvironmentVariables`
-3. Run `./install.sh` to activate it
+3. Add env var guard tests to `test.sh` and verify they pass (`./test.sh`)
+4. Run `./install.sh` to activate it
 
 To reuse an existing script for a different project, just create another plist with different `EnvironmentVariables` pointing to the same script.
 
