@@ -53,6 +53,9 @@ if ! "$select_all"; then
     exit 0
   fi
 
+  # Normalize commas to spaces so "1,2,3" works the same as "1 2 3"
+  selection="$(echo "$selection" | tr ',' ' ')"
+
   if [ "$selection" = "a" ]; then
     select_all=true
   fi
